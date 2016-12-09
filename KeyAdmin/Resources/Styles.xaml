@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:KeyAdmin.Styles">
+    
+    <SolidColorBrush x:Key="brs_gold" Color="#D4AF37"/>
+    <SolidColorBrush x:Key="brs_blue" Color="#FF2D5787"/>
+    <SolidColorBrush x:Key="brs_lightblue" Color="#FF007ACC"/>
+
+    <Style x:Key="stl_adm_ctrl_Titel" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ResourceKey=brs_gold}"/>
+        <Setter Property="FontSize" Value="35"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="Times New Roman" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    ShadowDepth="4"
+                    Direction="330"
+                    Color="Black"
+                    Opacity="0.5"
+                    BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_adm_ctrl_Info" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ResourceKey=brs_lightblue}"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="Times New Roman" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    ShadowDepth="4"
+                    Direction="330"
+                    Color="Black"
+                    Opacity="0.5"
+                    BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_adm_ctrl_loginbox" TargetType="{x:Type TextBox}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Gray"/>
+    </Style>
+
+    <Style x:Key="stl_adm_ctrl_loginbox_bordershadow" TargetType="{x:Type Border}">
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    ShadowDepth="4"
+                    Direction="330"
+                    Color="Black"
+                    Opacity="0.5"
+                    BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_adm_ctrl_loginbox_bordercolor" TargetType="Border">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{StaticResource brs_blue}"/>
+        <Setter Property="CornerRadius" Value="5"/>
+    </Style>
+
+
+</ResourceDictionary>
