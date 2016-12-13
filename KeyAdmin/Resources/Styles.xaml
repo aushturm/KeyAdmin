@@ -5,20 +5,16 @@
     <SolidColorBrush x:Key="brs_gold" Color="#D4AF37"/>
     <SolidColorBrush x:Key="brs_blue" Color="#FF2D5787"/>
     <SolidColorBrush x:Key="brs_lightblue" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="brs_Grey" Color="#FF6C6C75"/>
 
     <Style x:Key="stl_adm_ctrl_Titel" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource ResourceKey=brs_gold}"/>
         <Setter Property="FontSize" Value="35"/>
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontFamily" Value="Times New Roman" />
-        <Setter Property="Effect">
+        <Setter Property="BitmapEffect">
             <Setter.Value>
-                <DropShadowEffect
-                    ShadowDepth="4"
-                    Direction="330"
-                    Color="Black"
-                    Opacity="0.5"
-                    BlurRadius="4"/>
+                <DropShadowBitmapEffect></DropShadowBitmapEffect>
             </Setter.Value>
         </Setter>
     </Style>
@@ -28,43 +24,35 @@
         <Setter Property="FontSize" Value="22"/>
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontFamily" Value="Times New Roman" />
-        <Setter Property="Effect">
+        <Setter Property="BitmapEffect">
             <Setter.Value>
-                <DropShadowEffect
-                    ShadowDepth="4"
-                    Direction="330"
-                    Color="Black"
-                    Opacity="0.5"
-                    BlurRadius="4"/>
+                <DropShadowBitmapEffect></DropShadowBitmapEffect>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="stl_adm_ctrl_loginbox" TargetType="{x:Type TextBox}">
+    <Style x:Key="stl_adm_ctrl_loginbox" TargetType="{x:Type PasswordBox}">
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="Background" Value="{StaticResource brs_Grey}"/>
     </Style>
 
     <Style x:Key="stl_adm_ctrl_loginbox_bordershadow" TargetType="{x:Type Border}">
-        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="Background" Value="Gray"/>
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect
-                    ShadowDepth="4"
-                    Direction="330"
-                    Color="Black"
-                    Opacity="0.5"
-                    BlurRadius="4"/>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
     <Style x:Key="stl_adm_ctrl_loginbox_bordercolor" TargetType="Border">
-        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="{StaticResource brs_blue}"/>
         <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Margin" Value="8,10,8,10"/>
+        <Setter Property="BitmapEffect">
+            <Setter.Value>
+                <DropShadowBitmapEffect></DropShadowBitmapEffect>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 
