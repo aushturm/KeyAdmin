@@ -55,5 +55,21 @@
         </Setter>
     </Style>
 
+    <Style x:Key="stl_adm_ctrl_loginbutton" BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+        <Setter Property="FontFamily" Value="Times New Roman"/>
+        <Setter Property="Background" Value="{StaticResource brs_gold}"/>
+        <Setter Property="BitmapEffect">
+            <Setter.Value>
+                <DropShadowBitmapEffect></DropShadowBitmapEffect>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource brs_Grey}"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_gold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>

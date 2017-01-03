@@ -36,11 +36,11 @@
                                     <VisualBrush Visual="{Binding ElementName=BDShadowRound}"/>
                                 </Grid.OpacityMask>
                                 <Border x:Name="BDShadowRound"  Style="{StaticResource stl_adm_ctrl_loginbox_bordershadow}"/>
-                                <PasswordBox  Style="{StaticResource stl_adm_ctrl_loginbox}" FontSize="18" ToolTip="Password"/>
+                                <PasswordBox x:Name="PWBox" Style="{StaticResource stl_adm_ctrl_loginbox}" FontSize="18" ToolTip="Password"/>
                             </Grid>
                         </Border>
                     </Grid>
-                    <Button Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="25" >
+                    <Button Style="{StaticResource stl_adm_ctrl_loginbutton}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="25" >
                         <TextBlock Text="login" TextWrapping="Wrap"/>
                     </Button>
                 </Grid>
