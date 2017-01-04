@@ -5,7 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeyAdmin.UI_Pages"
              mc:Ignorable="d"
+             xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:vm="clr-namespace:KeyAdmin.ViewModel"
              d:DesignHeight="300" d:DesignWidth="400">
+    <UserControl.DataContext>
+        <vm:Controller_UI_Admission_Control/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -28,11 +34,18 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Admission Control" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource stl_adm_ctrl_Titel}"/>
                     <TextBlock Text="Password" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{StaticResource stl_adm_ctrl_Info}"/>
-
-                    <Grid Grid.Row="2">
-                        <PasswordBox x:Name="PWBox" Style="{StaticResource stl_adm_ctrl_pwbox}" FontSize="18" ToolTip="Password"/>
-                    </Grid>
-                    <Button Style="{StaticResource default_button}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="25" >
+                    <PasswordBox Grid.Row="2" Name="PWBox"  Style="{StaticResource stl_adm_ctrl_pwbox}" FontSize="18" ToolTip="Password"/>
+                    <Button 
+                        Style="{StaticResource default_button}" 
+                            Grid.Row="3" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Width="75" Height="25" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cmd:EventToCommand Command="{Binding Login}" 
+                                                    CommandParameter="{Binding ElementName=This}" 
+                                                    PassEventArgsToCommand="True" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <TextBlock Text="GO!" TextWrapping="Wrap"/>
                     </Button>
                 </Grid>

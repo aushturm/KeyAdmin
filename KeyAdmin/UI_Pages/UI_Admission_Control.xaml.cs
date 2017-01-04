@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeyAdmin.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,19 @@ namespace KeyAdmin.UI_Pages
     /// <summary>
     /// Interaction logic for UI_Admission_Control.xaml
     /// </summary>
-    public partial class UI_Admission_Control : UserControl
+    public partial class UI_Admission_Control : UserControl, IHavePassword
     {
         public UI_Admission_Control()
         {
             InitializeComponent();
+        }
+
+        public System.Security.SecureString Password
+        {
+            get
+            {
+                return PWBox.SecurePassword;
+            }
         }
     }
 }

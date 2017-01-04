@@ -31,12 +31,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="stl_adm_ctrl_loginbox" TargetType="{x:Type PasswordBox}">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="BorderBrush" Value="{x:Null}"/>
-        <Setter Property="Background" Value="{StaticResource brs_blue}"/>
-    </Style>
-
     <Style x:Key="default_button" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="Times New Roman"/>
         <Setter Property="Background" Value="{StaticResource brs_gold}"/>
@@ -64,10 +58,9 @@
                 <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_gold}"/>
+                <Setter Property="Background" Value="{StaticResource brs_blue}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
