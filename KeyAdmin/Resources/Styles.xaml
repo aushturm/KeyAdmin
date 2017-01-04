@@ -20,7 +20,7 @@
     </Style>
 
     <Style x:Key="stl_adm_ctrl_Info" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource ResourceKey=brs_lightblue}"/>
+        <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
         <Setter Property="FontSize" Value="22"/>
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontFamily" Value="Times New Roman" />
@@ -34,28 +34,10 @@
     <Style x:Key="stl_adm_ctrl_loginbox" TargetType="{x:Type PasswordBox}">
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="{x:Null}"/>
-        <Setter Property="Background" Value="{StaticResource brs_Grey}"/>
+        <Setter Property="Background" Value="{StaticResource brs_blue}"/>
     </Style>
 
-    <Style x:Key="stl_adm_ctrl_loginbox_bordershadow" TargetType="{x:Type Border}">
-        <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Background" Value="Gray"/>
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-
-    <Style x:Key="stl_adm_ctrl_loginbox_bordercolor" TargetType="Border">
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource brs_blue}"/>
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Margin" Value="8,10,8,10"/>
-        <Setter Property="BitmapEffect">
-            <Setter.Value>
-                <DropShadowBitmapEffect></DropShadowBitmapEffect>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="stl_adm_ctrl_loginbutton" BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+    <Style x:Key="default_button" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="Times New Roman"/>
         <Setter Property="Background" Value="{StaticResource brs_gold}"/>
         <Setter Property="BitmapEffect">
@@ -63,13 +45,56 @@
                 <DropShadowBitmapEffect></DropShadowBitmapEffect>
             </Setter.Value>
         </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource brs_Grey}"/>
-                <Setter Property="Foreground" Value="{StaticResource brs_gold}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="{StaticResource brs_lightblue}"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Background" Value="White"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="{x:Type PasswordBox}" x:Key="stl_adm_ctrl_pwbox">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource brs_gold}"/>
+        <Setter Property="Background" Value="{StaticResource brs_blue}"/>
+
+        <Setter Property="BitmapEffect">
+            <Setter.Value>
+                <DropShadowBitmapEffect></DropShadowBitmapEffect>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            VerticalAlignment="Center"
+                            CornerRadius="5">
+                        <ScrollViewer  x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

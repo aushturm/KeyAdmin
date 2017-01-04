@@ -30,18 +30,10 @@
                     <TextBlock Text="Password" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{StaticResource stl_adm_ctrl_Info}"/>
 
                     <Grid Grid.Row="2">
-                        <Border Style="{StaticResource stl_adm_ctrl_loginbox_bordercolor}">
-                            <Grid  AllowDrop="True">
-                                <Grid.OpacityMask>
-                                    <VisualBrush Visual="{Binding ElementName=BDShadowRound}"/>
-                                </Grid.OpacityMask>
-                                <Border x:Name="BDShadowRound"  Style="{StaticResource stl_adm_ctrl_loginbox_bordershadow}"/>
-                                <PasswordBox x:Name="PWBox" Style="{StaticResource stl_adm_ctrl_loginbox}" FontSize="18" ToolTip="Password"/>
-                            </Grid>
-                        </Border>
+                        <PasswordBox x:Name="PWBox" Style="{StaticResource stl_adm_ctrl_pwbox}" FontSize="18" ToolTip="Password"/>
                     </Grid>
-                    <Button Style="{StaticResource stl_adm_ctrl_loginbutton}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="25" >
-                        <TextBlock Text="login" TextWrapping="Wrap"/>
+                    <Button Style="{StaticResource default_button}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="25" >
+                        <TextBlock Text="GO!" TextWrapping="Wrap"/>
                     </Button>
                 </Grid>
             </Border>
