@@ -8,6 +8,7 @@
              xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:vm="clr-namespace:KeyAdmin.ViewModel"
+             x:Name="Parent"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.DataContext>
         <vm:Controller_UI_Admission_Control/>
@@ -15,7 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="220"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -30,19 +31,23 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="50"/>
+                        <RowDefinition Height="20"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Admission Control" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource stl_adm_ctrl_Titel}"/>
                     <TextBlock Text="Password" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{StaticResource stl_adm_ctrl_Info}"/>
                     <PasswordBox Grid.Row="2" Name="PWBox"  Style="{StaticResource stl_adm_ctrl_pwbox}" FontSize="18" ToolTip="Password"/>
+                    <Button Grid.Row="3" Style="{StaticResource link}">
+                        <TextBlock Text="Create New Password" TextWrapping="Wrap"/>
+                    </Button>
                     <Button 
                         Style="{StaticResource default_button}" 
-                            Grid.Row="3" HorizontalAlignment="Center" 
+                            Grid.Row="4" HorizontalAlignment="Center" 
                             VerticalAlignment="Center" Width="75" Height="25" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <cmd:EventToCommand Command="{Binding Login}" 
-                                                    CommandParameter="{Binding ElementName=This}" 
+                                <cmd:EventToCommand Command="{Binding Login}"
+                                                    CommandParameter="{Binding ElementName=Parent}"
                                                     PassEventArgsToCommand="True" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>

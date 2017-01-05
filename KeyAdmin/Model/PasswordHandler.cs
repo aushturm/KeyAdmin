@@ -13,7 +13,7 @@ namespace KeyAdmin.Model
     {
         static byte[] entropy = Encoding.Unicode.GetBytes("Salt Is Not A Password");
 
-        public static string EncryptString(SecureString input)
+        public static string EncryptString(this SecureString input)
         {
             byte[] encryptedData = ProtectedData.Protect(
                 Encoding.Unicode.GetBytes(ToInsecureString(input)),
@@ -22,7 +22,7 @@ namespace KeyAdmin.Model
             return Convert.ToBase64String(encryptedData);
         }
 
-        public static SecureString DecryptString(string encryptedData)
+        public static SecureString DecryptString(this string encryptedData)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace KeyAdmin.Model
             return returnValue;
         }
 
-        public static bool SecureStringEqual(SecureString pw1, SecureString pw2)
+        public static bool SecureStringEqual(this SecureString pw1, SecureString pw2)
         {
             if (pw1 == null)
             {
