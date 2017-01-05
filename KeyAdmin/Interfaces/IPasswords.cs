@@ -10,4 +10,11 @@ namespace KeyAdmin.Interfaces
     {
         System.Security.SecureString Password { get; }
     }
+
+    public interface IHavePasswordsToChange
+    {
+        System.Security.SecureString OldPassword { get; }
+        System.Security.SecureString NewPassword { get; }
+        System.Security.SecureString ConfirmPassword { get; }
+    }
 }

@@ -16,8 +16,20 @@ namespace KeyAdmin.ViewModel
     public class Controller_UI_Admission_Control
     {
         private RelayCommand<object> _login;
+        private RelayCommand _openPWDialog;
+        private RelayCommand<object> _changePassword;
 
         public RelayCommand<object> Login
+        {
+            get { return _login; }
+        }
+
+        public RelayCommand OpenPWDialog
+        {
+            get { return _openPWDialog; }
+        }
+
+        public RelayCommand<object> ChangePassword
         {
             get { return _login; }
         }
@@ -25,7 +37,20 @@ namespace KeyAdmin.ViewModel
         public Controller_UI_Admission_Control()
         {
             _login = new RelayCommand<object>(LoginHandler);
+            _openPWDialog = new RelayCommand(OpenPWDialogHandler);
+            _changePassword = new RelayCommand<object>(ChangePasswordHandler);
         }
+
+        private void OpenPWDialogHandler()
+        {
+            View.ChangePwDialog changePwDialog = new View.ChangePwDialog();
+            changePwDialog.ShowDialog();
+        }
+        public void ChangePasswordHandler(object parameter)
+        {
+
+        }
+
 
         private void LoginHandler(object parameter)
         {

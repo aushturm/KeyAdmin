@@ -37,8 +37,14 @@
                     <TextBlock Text="Admission Control" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource stl_adm_ctrl_Titel}"/>
                     <TextBlock Text="Password" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{StaticResource stl_adm_ctrl_Info}"/>
                     <PasswordBox Grid.Row="2" Name="PWBox"  Style="{StaticResource stl_adm_ctrl_pwbox}" FontSize="18" ToolTip="Password"/>
-                    <Button Grid.Row="3" Style="{StaticResource link}">
-                        <TextBlock Text="Create New Password" TextWrapping="Wrap"/>
+                    <Button Grid.Row="3" HorizontalAlignment="Center" Style="{StaticResource link}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cmd:EventToCommand Command="{Binding OpenPWDialog}"
+                                                    PassEventArgsToCommand="True" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <TextBlock Text="Change Password" TextWrapping="Wrap"/>
                     </Button>
                     <Button 
                         Style="{StaticResource default_button}" 

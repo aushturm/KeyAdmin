@@ -106,6 +106,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ChangePwDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,7 +118,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\IHavePassword.cs" />
+    <Compile Include="Interfaces\IPasswords.cs" />
     <Compile Include="Model\GeneralExtensions.cs" />
     <Compile Include="Model\PasswordHandler.cs" />
     <Compile Include="UI_Pages\UI_Admission_Control.xaml.cs">
@@ -124,6 +128,9 @@
     <Compile Include="ViewModel\Controller_UI_Admission_Control.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ChangePwDialog.xaml.cs">
+      <DependentUpon>ChangePwDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

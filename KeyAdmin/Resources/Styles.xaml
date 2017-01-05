@@ -58,9 +58,8 @@
                 <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Foreground" Value="{StaticResource brs_gold}"/>
-                <Setter Property="Background" Value="{StaticResource brs_blue}"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_blue}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource brs_blue}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -92,7 +91,6 @@
 
     <Style x:Key="link" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="Times New Roman"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -103,10 +101,11 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource brs_blue}"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
+                <Setter Property="Cursor" Value="Hand" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
+                <Setter Property="Foreground" Value="{StaticResource brs_blue}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
