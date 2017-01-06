@@ -62,15 +62,16 @@ namespace KeyAdmin.ViewModel
                         Settings.Default.Password = newPassword.EncryptString();
                         View.ChangePwDialog dialog = passwordContainer as View.ChangePwDialog;
                         dialog.Close();
+                        GeneralExtensions.ShowInfoMessage("Password successfully changed!");
                     }
                     else
                     {
-                        GeneralExtensions.ShowErrorMessage("New Passwords are not equal!");
+                        GeneralExtensions.ShowErrorMessage("New passwords are not equal!");
                     }
                 }
                 else
                 {
-                    GeneralExtensions.ShowErrorMessage("Wrong Password!");
+                    GeneralExtensions.ShowErrorMessage("wrong password!");
                 }
             }
         }
@@ -85,7 +86,7 @@ namespace KeyAdmin.ViewModel
                 var password = Settings.Default.Password.DecryptString();
                 if (userPassword.SecureStringEqual(password))
                 {
-
+                    MessageBox.Show("right pw");
                 }
                 else
                 {
