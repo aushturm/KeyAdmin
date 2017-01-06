@@ -31,7 +31,7 @@ namespace KeyAdmin.ViewModel
 
         public RelayCommand<object> ChangePassword
         {
-            get { return _login; }
+            get { return _changePassword; }
         }
 
         public Controller_UI_Admission_Control()
@@ -48,7 +48,31 @@ namespace KeyAdmin.ViewModel
         }
         public void ChangePasswordHandler(object parameter)
         {
-
+            var passwordContainer = parameter as IHavePasswordsToChange;
+            if (passwordContainer != null)
+            {
+                var oldPassword = passwordContainer.OldPassword;
+                var newPassword = passwordContainer.NewPassword;
+                var confirmPassword = passwordContainer.ConfirmPassword;
+                var password = Settings.Default.Password.DecryptString();
+                if (oldPassword.SecureStringEqual(password))
+                {
+                    if (newPassword.SecureStringEqual(confirmPassword))
+                    {
+                        Settings.Default.Password = newPassword.EncryptString();
+                        View.ChangePwDialog dialog = passwordContainer as View.ChangePwDialog;
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        GeneralExtensions.ShowErrorMessage("New Passwords are not equal!");
+                    }
+                }
+                else
+                {
+                    GeneralExtensions.ShowErrorMessage("Wrong Password!");
+                }
+            }
         }
 
 
