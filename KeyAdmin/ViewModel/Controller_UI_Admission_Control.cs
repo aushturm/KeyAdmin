@@ -10,15 +10,23 @@ using System.Security;
 using System.Windows;
 using KeyAdmin.Properties;
 using KeyAdmin.Model;
+using KeyAdmin.EventArgs;
 
 namespace KeyAdmin.ViewModel
 {
-    public class Controller_UI_Admission_Control
+    public class Controller_UI_Admission_Control : IUIPages
     {
+        #region members
         private RelayCommand<object> _login;
         private RelayCommand _openPWDialog;
         private RelayCommand<object> _changePassword;
+        #endregion
 
+        #region events
+        public event EventHandler<ViewStateChangedEventArgs> ViewStateChanged;
+        #endregion
+
+        #region properties
         public RelayCommand<object> Login
         {
             get { return _login; }
@@ -33,14 +41,18 @@ namespace KeyAdmin.ViewModel
         {
             get { return _changePassword; }
         }
+        #endregion
 
+        #region constructor
         public Controller_UI_Admission_Control()
         {
             _login = new RelayCommand<object>(LoginHandler);
             _openPWDialog = new RelayCommand(OpenPWDialogHandler);
             _changePassword = new RelayCommand<object>(ChangePasswordHandler);
         }
+        #endregion
 
+        #region event handlers
         private void OpenPWDialogHandler()
         {
             View.ChangePwDialog changePwDialog = new View.ChangePwDialog();
@@ -60,7 +72,7 @@ namespace KeyAdmin.ViewModel
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
                         Settings.Default.Password = newPassword.EncryptString();
-                        View.ChangePwDialog dialog = passwordContainer as View.ChangePwDialog;
+                        Window dialog = passwordContainer as Window;
                         dialog.Close();
                         GeneralExtensions.ShowInfoMessage("Password successfully changed!");
                     }
@@ -76,7 +88,6 @@ namespace KeyAdmin.ViewModel
             }
         }
 
-
         private void LoginHandler(object parameter)
         {
             var passwordContainer = parameter as IHavePassword;
@@ -86,7 +97,8 @@ namespace KeyAdmin.ViewModel
                 var password = Settings.Default.Password.DecryptString();
                 if (userPassword.SecureStringEqual(password))
                 {
-                    MessageBox.Show("right pw");
+                    OnViewStateChanged(new ViewStateChangedEventArgs()
+                    {  Message = "Access permitted", viewState = ViewState.Finished});
                 }
                 else
                 {
@@ -94,7 +106,17 @@ namespace KeyAdmin.ViewModel
                 }
             }
         }
+#endregion
 
-        
+        #region raise event handler
+        protected void OnViewStateChanged(ViewStateChangedEventArgs e)
+        {
+            EventHandler<ViewStateChangedEventArgs> handler = ViewStateChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+        #endregion
     }
 }

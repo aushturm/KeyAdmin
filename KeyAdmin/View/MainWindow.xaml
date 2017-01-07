@@ -13,6 +13,6 @@
         <vm:Controller_MainWindow/>
     </Window.DataContext>
     <Grid>
-        <ContentControl Content="{Binding Displayed_View}"/>
+        <ContentControl Content="{Binding Display_View}"/>
     </Grid>
 </Window>

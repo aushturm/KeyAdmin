@@ -8,16 +8,18 @@ using KeyAdmin.UI_Pages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using System.ComponentModel;
+using KeyAdmin.Interfaces;
 
 namespace KeyAdmin.ViewModel
 {
     public class Controller_MainWindow
     {
-        //private members
+        #region private members
         private UserControl _display_view;
+        #endregion
 
-        //properties
-        public UserControl Displayed_View
+        #region properties
+        public UserControl Display_View
         {
             get
             {
@@ -26,14 +28,16 @@ namespace KeyAdmin.ViewModel
             set
             {
                 _display_view = value;
-                OnPropertyChanged("Displayed_View");
+                OnPropertyChanged("Display_View");
             }
         }
+        #endregion
 
-        //events
+        #region events
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
 
-        //event handlers
+        #region raise event handlers
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -41,14 +45,23 @@ namespace KeyAdmin.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        #endregion
 
-        //constuctors
+        # region constuctors
         public Controller_MainWindow()
         {
             UI_Admission_Control ui_adms_ctrl = new UI_Admission_Control();
-            Displayed_View = ui_adms_ctrl;
+            IUIPages pageControl = ui_adms_ctrl.DataContext as IUIPages;
+            pageControl.ViewStateChanged += Display_View_ViewStateChanged;
+            Display_View = ui_adms_ctrl;
         }
+        #endregion
 
-
+        #region event handler
+        private void Display_View_ViewStateChanged(object sender, EventArgs.ViewStateChangedEventArgs e)
+        {
+            Model.GeneralExtensions.ShowInfoMessage("Access granted");
+        }
+        #endregion
     }
 }
