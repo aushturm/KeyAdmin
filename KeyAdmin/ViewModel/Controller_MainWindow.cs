@@ -12,7 +12,7 @@ using KeyAdmin.Interfaces;
 
 namespace KeyAdmin.ViewModel
 {
-    public class Controller_MainWindow
+    public class Controller_MainWindow : INotifyPropertyChanged
     {
         #region private members
         private UserControl _display_view;
@@ -60,7 +60,10 @@ namespace KeyAdmin.ViewModel
         #region event handler
         private void Display_View_ViewStateChanged(object sender, EventArgs.ViewStateChangedEventArgs e)
         {
-            Model.GeneralExtensions.ShowInfoMessage("Access granted");
+            UI_Main_Page mainPage = new UI_Main_Page();
+            IUIPages pageControl = mainPage.DataContext as IUIPages;
+            pageControl.ViewStateChanged += Display_View_ViewStateChanged;
+            Display_View = mainPage;
         }
         #endregion
     }

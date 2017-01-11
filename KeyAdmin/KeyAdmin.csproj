@@ -106,6 +106,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI_Pages\UI_Main_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChangePwDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,8 +130,12 @@
     <Compile Include="UI_Pages\UI_Admission_Control.xaml.cs">
       <DependentUpon>UI_Admission_Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI_Pages\UI_Main_Page.xaml.cs">
+      <DependentUpon>UI_Main_Page.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\Controller_MainWindow.cs" />
     <Compile Include="ViewModel\Controller_UI_Admission_Control.cs" />
+    <Compile Include="ViewModel\Controller_UI_Main_Page.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ChangePwDialog.xaml.cs">
