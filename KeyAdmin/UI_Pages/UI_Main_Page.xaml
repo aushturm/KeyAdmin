@@ -20,7 +20,13 @@
         <Border Background="DarkRed">
             <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontFamily="Times New Roman" FontSize="20" FontStyle="Italic" FontWeight="Bold" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
         </Border>
-        <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3" />
+        <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3">
+            <Grid>
+                <ListBox>
+                    <ListBoxItem/>
+                </ListBox>
+            </Grid>
+        </Border>
         <Border Grid.Row="2" Background="DarkRed" />
     </Grid>
 </UserControl>
