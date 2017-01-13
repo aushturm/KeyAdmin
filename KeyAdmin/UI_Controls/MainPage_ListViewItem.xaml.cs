@@ -18,7 +18,7 @@ namespace KeyAdmin.UI_Controls
     /// <summary>
     /// Interaction logic for MainPage_ListViewItem.xaml
     /// </summary>
-    public partial class MainPage_ListViewItem : UserControl
+    public partial class MainPage_ListViewItem : ListViewItem
     {
         public MainPage_ListViewItem()
         {

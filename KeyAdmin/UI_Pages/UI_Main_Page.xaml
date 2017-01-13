@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:KeyAdmin.UI_Pages"
              xmlns:vm="clr-namespace:KeyAdmin.ViewModel"
              mc:Ignorable="d" 
+             xmlns:uictrl="clr-namespace:KeyAdmin.UI_Controls"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.DataContext>
         <vm:Controller_UI_Main_Page/>
@@ -23,7 +24,7 @@
         <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3">
             <Grid>
                 <ListBox>
-                    <ListBoxItem/>
+                    <uictrl:MainPage_ListViewItem/>
                 </ListBox>
             </Grid>
         </Border>
