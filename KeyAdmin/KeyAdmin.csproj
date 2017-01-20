@@ -102,10 +102,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI_Controls\MainPage_ListViewItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI_Pages\UI_Admission_Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,11 +125,9 @@
     <Compile Include="EventArgs\ViewStateChangedEventArgs.cs" />
     <Compile Include="Interfaces\IPasswords.cs" />
     <Compile Include="Interfaces\IViewState.cs" />
+    <Compile Include="Model\DataHolder.cs" />
     <Compile Include="Model\GeneralExtensions.cs" />
     <Compile Include="Model\PasswordHandler.cs" />
-    <Compile Include="UI_Controls\MainPage_ListViewItem.xaml.cs">
-      <DependentUpon>MainPage_ListViewItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI_Pages\UI_Admission_Control.xaml.cs">
       <DependentUpon>UI_Admission_Control.xaml</DependentUpon>
     </Compile>
