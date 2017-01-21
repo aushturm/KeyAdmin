@@ -34,9 +34,14 @@ namespace KeyAdmin.ViewModel
         #region constructors
         public Controller_UI_Main_Page()
         {
-            AccountPropertiesItem properiesss = new AccountPropertiesItem() { identifier = "propertie identifier", value = "propertie value" };
-            AccountItem accountItem = new AccountItem() { identifier = "accountItem identifier", properties = properiesss };
-            AccountItems.Add(accountItem);
+            List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
+            for (int cnt = 0; cnt < 20; cnt++)
+            {
+                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
+                propertiesList.Add(properiesss);
+                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier", Properties = propertiesList };
+                AccountItems.Add(accountItem);
+            }
         }
         #endregion
 

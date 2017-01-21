@@ -8,13 +8,13 @@ namespace KeyAdmin.Model
 {
     public class AccountPropertiesItem
     {
-        public string identifier;
-        public string value;
+        public string Identifier { get; set; }
+        public string Value { get; set; }
     }
 
     public class AccountItem
     {
-        public string identifier;
-        public AccountPropertiesItem properties;
+        public string Identifier { get; set; }
+        public List<AccountPropertiesItem> Properties { get; set; }
     }
 }
