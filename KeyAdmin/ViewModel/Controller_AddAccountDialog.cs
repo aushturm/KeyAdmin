@@ -33,8 +33,11 @@ namespace KeyAdmin.ViewModel
         public Controller_AddAccountDialog()
         {
             List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
-            AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
-            propertiesList.Add(properiesss);
+            for (int cnt2 = 0; cnt2 < 20; cnt2++)
+            {
+                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
+                propertiesList.Add(properiesss);
+            }
             AccountItem accountItem = new AccountItem() { Identifier = "account Name", Properties = propertiesList };
             AccountData.Add(accountItem);
         }
