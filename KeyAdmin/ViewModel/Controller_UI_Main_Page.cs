@@ -7,6 +7,8 @@ using KeyAdmin.Interfaces;
 using KeyAdmin.EventArgs;
 using KeyAdmin.Model;
 using System.ComponentModel;
+using GalaSoft.MvvmLight.Command;
+using KeyAdmin.View;
 
 namespace KeyAdmin.ViewModel
 {
@@ -14,6 +16,7 @@ namespace KeyAdmin.ViewModel
     {
         #region members
         private List<AccountItem> _accountItems = new List<AccountItem>();
+        private RelayCommand _addAccountDetails;
         #endregion
 
         #region properties
@@ -29,19 +32,36 @@ namespace KeyAdmin.ViewModel
                 OnPropertyChanged("AccountItems");
             }
         }
+
+        public RelayCommand AddAccountDetails
+        {
+            get { return _addAccountDetails; }
+        }
         #endregion
 
         #region constructors
         public Controller_UI_Main_Page()
         {
-            List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
+            _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
             for (int cnt = 0; cnt < 20; cnt++)
             {
-                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
-                propertiesList.Add(properiesss);
-                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier", Properties = propertiesList };
+                List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
+                for (int cnt2 = 0; cnt2 < 20; cnt2++)
+                {
+                    AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier/ " + cnt + "." + cnt2, Value = "propertie value" };
+                    propertiesList.Add(properiesss);
+                }
+                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier/ " + cnt, Properties = propertiesList };
                 AccountItems.Add(accountItem);
             }
+        }
+        #endregion
+
+        #region event handlers
+        private void AddAccountDetailsHandler()
+        {
+            AddAccountDialog addDialog = new AddAccountDialog();
+            addDialog.ShowDialog();
         }
         #endregion
 

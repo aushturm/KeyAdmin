@@ -1,0 +1,80 @@
+﻿<Window x:Class="KeyAdmin.View.AddAccountDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeyAdmin.View"
+        xmlns:vm="clr-namespace:KeyAdmin.ViewModel"
+        mc:Ignorable="d"
+        Title="AddAccountDialogxaml" Height="250" Width="400">
+    <Window.DataContext>
+        <vm:Controller_AddAccountDialog/>
+    </Window.DataContext>
+    <ItemsControl ItemsSource="{Binding AccountData}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Grid/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate >
+                <Border BorderThickness="3" BorderBrush="DarkRed">
+                    <StackPanel Margin="2">
+                        <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="2" CornerRadius="5" Margin="0,0,0,-5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox  Text="{Binding Identifier}" 
+                          MinWidth="100"
+                          Margin="2"
+                     FontFamily="Times New Roman" FontWeight="Bold"
+                     FontSize="20" VerticalAlignment="Center"
+                     Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
+                                <Button Grid.Column="1" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="delete" Width="60" Height="20"/>
+                                <Button Grid.Column="2" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="add" Width="60" Height="20"/>
+                            </Grid>
+                        </Border>
+                        <Border BorderBrush="{StaticResource brs_blue}" 
+                                        BorderThickness="2,0,2,2" CornerRadius="0,0,5,5" 
+                                        Margin="0,0,0,0">
+                            <ItemsControl ItemsSource="{Binding Properties}" HorizontalAlignment="Center" Margin="0,5,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Margin="2"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate >
+                                        <Border BorderBrush="{StaticResource brs_gold}" BorderThickness="2" Margin="2" CornerRadius="2">
+                                            <StackPanel Orientation="Horizontal" Margin="1">
+                                                <TextBox Text="{Binding Identifier}"
+                                                           Margin="2"
+                                                           FontWeight="Bold"
+                                                     TextWrapping="Wrap"
+                                                     AcceptsReturn="True"
+                                                       FontFamily="Arial"
+                                                       FontSize="12" VerticalAlignment="Center" 
+                                                       Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
+                                                <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="0,0,2,0" Margin="0,0,0,0"/>
+                                                <TextBox Text="{Binding Value}"
+                                                     TextWrapping="Wrap"
+                                                         Margin="2"
+                                                       FontFamily="Arial"
+                                                     AcceptsReturn="True"
+                                                       FontSize="12" VerticalAlignment="Center" 
+                                                       Foreground="Black" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</Window>

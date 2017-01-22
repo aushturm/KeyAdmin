@@ -143,6 +143,8 @@
                                                 <TextBox Text="{Binding Value}"
                                                          Margin="2"
                                                          BorderThickness="0"
+                                                          TextWrapping="Wrap"
+                                                     AcceptsReturn="True"
                                                        FontFamily="Arial"
                                                        FontSize="12" VerticalAlignment="Center" 
                                                        Foreground="Black" HorizontalAlignment="Center"/>
