@@ -19,7 +19,11 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate >
                 <Border BorderThickness="3" BorderBrush="DarkRed">
-                    <StackPanel Margin="2">
+                    <Grid Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="2" CornerRadius="5" Margin="0,0,0,-5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -37,10 +41,10 @@
                                 <Button Grid.Column="2" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="add" Width="60" Height="20"/>
                             </Grid>
                         </Border>
-                        <Border BorderBrush="{StaticResource brs_blue}" 
+                        <Border Grid.Row="2" BorderBrush="{StaticResource brs_blue}" 
                                         BorderThickness="2,0,2,2" CornerRadius="0,0,5,5" 
                                         Margin="0,0,0,0">
-                            <ListBox ItemsSource="{Binding Properties}" HorizontalAlignment="Center" 
+                            <ListBox ItemsSource="{Binding Properties}" HorizontalAlignment="Center" Name="lb_list"
                                      Margin="0,5,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      BorderThickness="0">
                                 <ListBox.ItemTemplate>
@@ -69,12 +73,12 @@
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel IsItemsHost="True"  />
+                                        <WrapPanel IsItemsHost="True"/>
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
                         </Border>
-                    </StackPanel>
+                    </Grid>
                 </Border>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

@@ -114,47 +114,71 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <StackPanel Margin="2">
+                    <Grid Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="2" CornerRadius="5" Margin="0,0,0,-5">
-                            <TextBlock Text="{Binding Identifier}" FontFamily="Times New Roman" FontWeight="Bold"
-                                                FontSize="20" VerticalAlignment="Center" 
-                                                Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox  Text="{Binding Identifier}" 
+                                            MinWidth="100"
+                                            Margin="2"
+                                            FontFamily="Times New Roman" FontWeight="Bold"
+                                            FontSize="20" VerticalAlignment="Center"
+                                            BorderThickness="0"
+                                            IsReadOnly="True"
+                                            Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
+                                <Button Grid.Column="1" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="customise" Width="60" Height="20"/>
+                            </Grid>
                         </Border>
-                        <Border BorderBrush="{StaticResource brs_blue}" 
+                        <Border Grid.Row="2" BorderBrush="{StaticResource brs_blue}" 
                                         BorderThickness="2,0,2,2" CornerRadius="0,0,5,5" 
                                         Margin="0,0,0,0">
-                            <ItemsControl ItemsSource="{Binding Properties}" HorizontalAlignment="Center" Margin="0,5,0,0">
+                            <ItemsControl ItemsSource="{Binding Properties}" HorizontalAlignment="Center" 
+                                     Margin="0,5,0,0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     BorderThickness="0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{StaticResource brs_gold}" BorderThickness="2" Margin="2" CornerRadius="2">
+                                            <StackPanel Orientation="Horizontal" Margin="1">
+                                                <TextBox Text="{Binding Identifier}"
+                                                        Margin="2"
+                                                        FontWeight="Bold"
+                                                        TextWrapping="Wrap"
+                                                        AcceptsReturn="True"
+                                                        BorderThickness="0"
+                                                        IsReadOnly="True"
+                                                        FontFamily="Arial"
+                                                        FontSize="12" VerticalAlignment="Center" 
+                                                        Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
+                                                <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="0,0,2,0" Margin="0,0,0,0"/>
+                                                <TextBox Text="{Binding Value}"
+                                                            TextWrapping="Wrap"
+                                                            Margin="2"
+                                                            BorderThickness="0"
+                                                            IsReadOnly="True"
+                                                            FontFamily="Arial"
+                                                            AcceptsReturn="True"
+                                                            FontSize="12" VerticalAlignment="Center" 
+                                                            Foreground="Black" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Margin="2"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate >
-                                        <Border BorderBrush="{StaticResource brs_gold}" BorderThickness="2" Margin="2" CornerRadius="2">
-                                            <StackPanel Orientation="Horizontal" Margin="1">
-                                                <TextBlock Text="{Binding Identifier}"
-                                                           Margin="2"
-                                                           FontWeight="Bold"
-                                                       FontFamily="Arial"
-                                                       FontSize="12" VerticalAlignment="Center" 
-                                                       Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
-                                                <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="0,0,2,0" Margin="0,0,0,0"/>
-                                                <TextBox Text="{Binding Value}"
-                                                         Margin="2"
-                                                         BorderThickness="0"
-                                                          TextWrapping="Wrap"
-                                                     AcceptsReturn="True"
-                                                       FontFamily="Arial"
-                                                       FontSize="12" VerticalAlignment="Center" 
-                                                       Foreground="Black" HorizontalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </Border>
-                    </StackPanel>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

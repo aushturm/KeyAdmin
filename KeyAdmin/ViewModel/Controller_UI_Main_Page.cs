@@ -9,18 +9,20 @@ using KeyAdmin.Model;
 using System.ComponentModel;
 using GalaSoft.MvvmLight.Command;
 using KeyAdmin.View;
+using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace KeyAdmin.ViewModel
 {
     class Controller_UI_Main_Page : IUIPages, INotifyPropertyChanged
     {
         #region members
-        private List<AccountItem> _accountItems = new List<AccountItem>();
+        private ObservableCollection<AccountItem> _accountItems = new ObservableCollection<AccountItem>();
         private RelayCommand _addAccountDetails;
         #endregion
 
         #region properties
-        public List<AccountItem> AccountItems
+        public ObservableCollection<AccountItem> AccountItems
         {
             get
             {
@@ -60,8 +62,16 @@ namespace KeyAdmin.ViewModel
         #region event handlers
         private void AddAccountDetailsHandler()
         {
-            AddAccountDialog addDialog = new AddAccountDialog();
-            addDialog.ShowDialog();
+                List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
+                for (int cnt2 = 0; cnt2 < 10; cnt2++)
+                {
+                    AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier/ " + cnt2, Value = "propertie value" };
+                    propertiesList.Add(properiesss);
+                }
+                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier/ " , Properties = propertiesList };
+                AccountItems.Add(accountItem);
+            //AddAccountDialog addDialog = new AddAccountDialog();
+            //addDialog.ShowDialog();
         }
         #endregion
 

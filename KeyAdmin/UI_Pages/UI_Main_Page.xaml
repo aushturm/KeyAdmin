@@ -24,7 +24,7 @@
             <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontFamily="Times New Roman" FontSize="20" FontStyle="Italic" FontWeight="Bold" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
         </Border>
         <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3">
-            <ListView ItemsSource="{Binding AccountItems}" 
+            <ListView ItemsSource="{Binding Path=AccountItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" 
                       HorizontalContentAlignment="Stretch"
                       ItemContainerStyle="{StaticResource MainPage_ListViewItem}"
                       ScrollViewer.CanContentScroll="False"
