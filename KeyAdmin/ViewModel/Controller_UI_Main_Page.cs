@@ -45,33 +45,22 @@ namespace KeyAdmin.ViewModel
         public Controller_UI_Main_Page()
         {
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
+            List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
             for (int cnt = 0; cnt < 20; cnt++)
             {
-                List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
-                for (int cnt2 = 0; cnt2 < 20; cnt2++)
-                {
-                    AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier/ " + cnt + "." + cnt2, Value = "propertie value" };
-                    propertiesList.Add(properiesss);
-                }
-                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier/ " + cnt, Properties = propertiesList };
-                AccountItems.Add(accountItem);
+                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
+                propertiesList.Add(properiesss);
             }
+            AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier", Properties = propertiesList };
+            AccountItems.Add(accountItem);
         }
         #endregion
 
         #region event handlers
         private void AddAccountDetailsHandler()
         {
-                List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
-                for (int cnt2 = 0; cnt2 < 10; cnt2++)
-                {
-                    AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier/ " + cnt2, Value = "propertie value" };
-                    propertiesList.Add(properiesss);
-                }
-                AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier/ " , Properties = propertiesList };
-                AccountItems.Add(accountItem);
-            //AddAccountDialog addDialog = new AddAccountDialog();
-            //addDialog.ShowDialog();
+            AddAccountDialog addDialog = new AddAccountDialog();
+            addDialog.ShowDialog();
         }
         #endregion
 
