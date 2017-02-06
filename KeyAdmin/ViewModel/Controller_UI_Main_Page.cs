@@ -45,14 +45,6 @@ namespace KeyAdmin.ViewModel
         public Controller_UI_Main_Page()
         {
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
-            List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
-            for (int cnt = 0; cnt < 20; cnt++)
-            {
-                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
-                propertiesList.Add(properiesss);
-            }
-            AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier", Properties = propertiesList };
-            AccountItems.Add(accountItem);
         }
         #endregion
 
@@ -61,6 +53,12 @@ namespace KeyAdmin.ViewModel
         {
             AddAccountDialog addDialog = new AddAccountDialog();
             addDialog.ShowDialog();
+            if (addDialog.DialogResult == true)
+            {
+                Controller_AddAccountDialog ctrl = addDialog.DataContext as Controller_AddAccountDialog;
+                AccountItems.Add(ctrl.AccountData[0]);
+                OnPropertyChanged("AccountItems");
+            }
         }
         #endregion
 

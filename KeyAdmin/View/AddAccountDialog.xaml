@@ -8,7 +8,8 @@
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         mc:Ignorable="d"
-        Title="AddAccountDialogxaml" Height="250" Width="400">
+        Name="ParentWindow"
+        Title="Add Account" Height="250" Width="400">
     <Window.DataContext>
         <vm:Controller_AddAccountDialog/>
     </Window.DataContext>
@@ -25,6 +26,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Border BorderBrush="{StaticResource brs_blue}" BorderThickness="2" CornerRadius="5" Margin="0,0,0,-5">
                             <Grid>
@@ -61,7 +63,7 @@
                                 </Button>
                             </Grid>
                         </Border>
-                        <Border Grid.Row="2" BorderBrush="{StaticResource brs_blue}" 
+                        <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" 
                                         BorderThickness="2,0,2,2" CornerRadius="0,0,5,5" 
                                         Margin="0,0,0,0">
                             <ListBox ItemsSource="{Binding Properties, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
@@ -109,6 +111,17 @@
                                 </ListBox.ItemsPanel>
                             </ListBox>
                         </Border>
+                        <Button Grid.Row="2" Style="{StaticResource default_button}" 
+                                        BitmapEffect="{x:Null}" Content="Ok" Width="60" Height="20">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <cmd:EventToCommand Command="{Binding Path=DataContext.CloseDialogOk, 
+                                                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding ElementName=ParentWindow}"
+                                                        PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
                     </Grid>
                 </Border>
             </DataTemplate>

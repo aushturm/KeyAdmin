@@ -66,12 +66,12 @@ namespace KeyAdmin.ViewModel
                 var oldPassword = passwordContainer.OldPassword;
                 var newPassword = passwordContainer.NewPassword;
                 var confirmPassword = passwordContainer.ConfirmPassword;
-                var password = Settings.Default.Password.DecryptString();
+                var password = Settings.Default.Password.DecryptString(Encoding.Unicode.GetBytes(oldPassword.ToInsecureString()));
                 if (oldPassword.SecureStringEqual(password))
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
-                        Settings.Default.Password = newPassword.EncryptString();
+                        Settings.Default.Password = newPassword.EncryptString(Encoding.Unicode.GetBytes(newPassword.ToInsecureString()));
                         Window dialog = passwordContainer as Window;
                         dialog.Close();
                         GeneralExtensions.ShowInfoMessage("Password successfully changed!");
@@ -94,7 +94,7 @@ namespace KeyAdmin.ViewModel
             if (passwordContainer != null)
             {
                 var userPassword = passwordContainer.Password;
-                var password = Settings.Default.Password.DecryptString();
+                var password = Settings.Default.Password.DecryptString(Encoding.Unicode.GetBytes(userPassword.ToInsecureString()));
                 if (userPassword.SecureStringEqual(password))
                 {
                     OnViewStateChanged(new ViewStateChangedEventArgs()

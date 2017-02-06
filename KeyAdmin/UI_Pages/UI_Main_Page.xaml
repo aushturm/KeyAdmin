@@ -41,9 +41,7 @@
                 <Button Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="add" Width="50" Height="23">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <cmd:EventToCommand Command="{Binding AddAccountDetails}"
-                                                    CommandParameter="{Binding ElementName=Parent}"
-                                                    PassEventArgsToCommand="True" />
+                            <cmd:EventToCommand Command="{Binding AddAccountDetails}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

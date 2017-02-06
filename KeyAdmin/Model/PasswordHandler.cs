@@ -11,9 +11,9 @@ namespace KeyAdmin.Model
 {
     public static class PasswordHandler
     {
-        static byte[] entropy = Encoding.Unicode.GetBytes("Salt Is Not A Password");
+        //static byte[] entropy = Encoding.Unicode.GetBytes("Salt Is Not A Password");
 
-        public static string EncryptString(this SecureString input)
+        public static string EncryptString(this SecureString input, byte[] entropy)
         {
             byte[] encryptedData = ProtectedData.Protect(
                 Encoding.Unicode.GetBytes(ToInsecureString(input)),
@@ -22,7 +22,7 @@ namespace KeyAdmin.Model
             return Convert.ToBase64String(encryptedData);
         }
 
-        public static SecureString DecryptString(this string encryptedData)
+        public static SecureString DecryptString(this string encryptedData, byte[] entropy)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace KeyAdmin.Model
             return secure;
         }
 
-        public static string ToInsecureString(SecureString input)
+        public static string ToInsecureString(this SecureString input)
         {
             string returnValue = string.Empty;
             IntPtr ptr = Marshal.SecureStringToBSTR(input);
@@ -107,33 +107,33 @@ namespace KeyAdmin.Model
             }
         }
 
-        public static bool IsEqualTo(this SecureString ss1, SecureString ss2)
-        {
-            IntPtr bstr1 = IntPtr.Zero;
-            IntPtr bstr2 = IntPtr.Zero;
-            try
-            {
-                bstr1 = Marshal.SecureStringToBSTR(ss1);
-                bstr2 = Marshal.SecureStringToBSTR(ss2);
-                int length1 = Marshal.ReadInt32(bstr1, -4);
-                int length2 = Marshal.ReadInt32(bstr2, -4);
-                if (length1 == length2)
-                {
-                    for (int x = 0; x < length1; ++x)
-                    {
-                        byte b1 = Marshal.ReadByte(bstr1, x);
-                        byte b2 = Marshal.ReadByte(bstr2, x);
-                        if (b1 != b2) return false;
-                    }
-                }
-                else return false;
-                return true;
-            }
-            finally
-            {
-                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
-                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
-            }
-        }
+        //public static bool IsEqualTo(this SecureString ss1, SecureString ss2)
+        //{
+        //    IntPtr bstr1 = IntPtr.Zero;
+        //    IntPtr bstr2 = IntPtr.Zero;
+        //    try
+        //    {
+        //        bstr1 = Marshal.SecureStringToBSTR(ss1);
+        //        bstr2 = Marshal.SecureStringToBSTR(ss2);
+        //        int length1 = Marshal.ReadInt32(bstr1, -4);
+        //        int length2 = Marshal.ReadInt32(bstr2, -4);
+        //        if (length1 == length2)
+        //        {
+        //            for (int x = 0; x < length1; ++x)
+        //            {
+        //                byte b1 = Marshal.ReadByte(bstr1, x);
+        //                byte b2 = Marshal.ReadByte(bstr2, x);
+        //                if (b1 != b2) return false;
+        //            }
+        //        }
+        //        else return false;
+        //        return true;
+        //    }
+        //    finally
+        //    {
+        //        if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
+        //        if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
+        //    }
+        //}
     }
 }

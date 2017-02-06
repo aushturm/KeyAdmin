@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace KeyAdmin.ViewModel
@@ -18,6 +19,7 @@ namespace KeyAdmin.ViewModel
         private int _selectedPropertie = 0;
         private RelayCommand _addPropertie;
         private RelayCommand _deletePropertie;
+        private RelayCommand<Window> _closeDialogOk;
         #endregion
 
         #region properties
@@ -45,6 +47,11 @@ namespace KeyAdmin.ViewModel
                 _addPropertie = value;
                 OnPropertyChanged("AddPropertie");
             }
+        }
+
+        public RelayCommand<Window> CloseDialogOk
+        {
+            get { return _closeDialogOk; }
         }
 
         public int SelectedPropertie
@@ -82,17 +89,13 @@ namespace KeyAdmin.ViewModel
         {
             _addPropertie = new RelayCommand(AddPropertieHandler);
             _deletePropertie = new RelayCommand(DeletePropertieHandler);
+            _closeDialogOk = new RelayCommand<Window>(CloseDialogOkHandler);
 
             List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
-            for (int cnt = 0; cnt < 5; cnt++)
-            {
-                AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "propertie identifier", Value = "propertie value" };
-                propertiesList.Add(properiesss);
-            }
-            AccountItem accountItem = new AccountItem() { Identifier = "accountItem identifier", Properties = propertiesList };
+            AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "name", Value = "value" };
+            propertiesList.Add(properiesss);
+            AccountItem accountItem = new AccountItem() { Identifier = "account name", Properties = propertiesList };
             AccountData.Add(accountItem);
-            OnPropertyChanged("AccountData");
-
         }
         #endregion
 
@@ -113,19 +116,35 @@ namespace KeyAdmin.ViewModel
         #region Event Handlers
         private void AddPropertieHandler()
         {
-            throw new NotImplementedException();
+            AccountItem account = AccountData[0];
+            account.Properties.Add(new AccountPropertiesItem() { Identifier = "name", Value="value"});
+            AccountData.Clear();
+            AccountData.Add(account);
+            OnPropertyChanged("AccountData");
         }
 
         private void DeletePropertieHandler()
         {
             List<AccountPropertiesItem> propertiesList = AccountData[0].Properties;
+            if (_selectedPropertie < 0)
+                return;
             propertiesList.RemoveAt(_selectedPropertie);
             AccountItem account = AccountData[0];
             account.Properties = propertiesList;
             AccountData.Clear();
             AccountData.Add(account);
             OnPropertyChanged("AccountData");
+            _selectedPropertie = -1;
         }
+
+        private void CloseDialogOkHandler(Window dialog)
+        {
+            dialog.DialogResult = true;
+            dialog.Close();
+        }
+        #endregion
+
+        #region private functions
         #endregion
     }
 }
