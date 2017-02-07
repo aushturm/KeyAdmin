@@ -9,10 +9,18 @@
              xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              mc:Ignorable="d" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              d:DesignHeight="300" d:DesignWidth="700">
     <UserControl.DataContext>
         <vm:Controller_UI_Main_Page/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="cvs" Source="{Binding Path=AccountItems, Mode=TwoWay}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Identifier" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -24,28 +32,27 @@
             <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontFamily="Times New Roman" FontSize="20" FontStyle="Italic" FontWeight="Bold" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
         </Border>
         <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3">
-            <ListView ItemsSource="{Binding Path=AccountItems, Mode=TwoWay}" 
+            <ListView ItemsSource="{Binding Source={StaticResource cvs}}"
                       HorizontalContentAlignment="Stretch"
                       ItemContainerStyle="{StaticResource MainPage_ListViewItem}"
                       ScrollViewer.CanContentScroll="False"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            </ListView>
         </Border>
         <Border Grid.Row="2" Background="DarkRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="add" Width="50" Height="23">
+                <Button Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="add" Width="50" Height="23">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <cmd:EventToCommand Command="{Binding AddAccountDetails}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="delete" Width="50" Height="23"/>
             </Grid>
         </Border>
     </Grid>

@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
                     xmlns:local="clr-namespace:KeyAdmin.Styles">
     
     <SolidColorBrush x:Key="brs_gold" Color="#D4AF37"/>
@@ -124,6 +126,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox  Text="{Binding Identifier}" 
                                             MinWidth="100"
@@ -133,7 +136,26 @@
                                             BorderThickness="0"
                                             IsReadOnly="True"
                                             Foreground="{StaticResource brs_blue}" HorizontalAlignment="Center"/>
-                                <Button Grid.Column="1" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="customise" Width="60" Height="20"/>
+                                <Button Grid.Column="1" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="customize" Width="60" Height="20">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                            <cmd:EventToCommand Command="{Binding Path=DataContext.EditAccountDetails, 
+                                                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                PassEventArgsToCommand="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                </Button>
+                                <Button Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="delete" Width="60" Height="20">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <cmd:EventToCommand Command="{Binding Path=DataContext.DeleteAccountDetails, 
+                                                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
                             </Grid>
                         </Border>
                         <Border Grid.Row="2" BorderBrush="{StaticResource brs_blue}" 

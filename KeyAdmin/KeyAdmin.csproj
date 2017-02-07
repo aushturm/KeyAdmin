@@ -110,7 +110,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\AddAccountDialog.xaml">
+    <Page Include="View\EditAccountDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,14 +138,14 @@
     <Compile Include="UI_Pages\UI_Main_Page.xaml.cs">
       <DependentUpon>UI_Main_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\Controller_AddAccountDialog.cs" />
+    <Compile Include="ViewModel\Controller_EditAccountDialog.cs" />
     <Compile Include="ViewModel\Controller_MainWindow.cs" />
     <Compile Include="ViewModel\Controller_UI_Admission_Control.cs" />
     <Compile Include="ViewModel\Controller_UI_Main_Page.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\AddAccountDialog.xaml.cs">
-      <DependentUpon>AddAccountDialog.xaml</DependentUpon>
+    <Compile Include="View\EditAccountDialog.xaml.cs">
+      <DependentUpon>EditAccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChangePwDialog.xaml.cs">
       <DependentUpon>ChangePwDialog.xaml</DependentUpon>

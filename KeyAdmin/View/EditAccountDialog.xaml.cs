@@ -17,9 +17,9 @@ namespace KeyAdmin.View
     /// <summary>
     /// Interaction logic for AddAccountDialogxaml.xaml
     /// </summary>
-    public partial class AddAccountDialog : Window
+    public partial class EditAccountDialog : Window
     {
-        public AddAccountDialog()
+        public EditAccountDialog()
         {
             InitializeComponent();
         }

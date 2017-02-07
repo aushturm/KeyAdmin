@@ -10,7 +10,7 @@ using System.ComponentModel;
 using GalaSoft.MvvmLight.Command;
 using KeyAdmin.View;
 using System.Collections.ObjectModel;
-using System.Threading;
+using System.Windows.Controls;
 
 namespace KeyAdmin.ViewModel
 {
@@ -19,6 +19,8 @@ namespace KeyAdmin.ViewModel
         #region members
         private ObservableCollection<AccountItem> _accountItems = new ObservableCollection<AccountItem>();
         private RelayCommand _addAccountDetails;
+        private RelayCommand<ListViewItem> _deleteAccountDetails;
+        private RelayCommand<ListViewItem> _editAccountDetails;
         #endregion
 
         #region properties
@@ -39,24 +41,58 @@ namespace KeyAdmin.ViewModel
         {
             get { return _addAccountDetails; }
         }
+        public RelayCommand<ListViewItem> DeleteAccountDetails
+        {
+            get { return _deleteAccountDetails; }
+        }
+        public RelayCommand<ListViewItem> EditAccountDetails
+        {
+            get { return _editAccountDetails; }
+        }
         #endregion
 
         #region constructors
         public Controller_UI_Main_Page()
         {
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
+            _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
+            _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
         }
         #endregion
 
         #region event handlers
         private void AddAccountDetailsHandler()
         {
-            AddAccountDialog addDialog = new AddAccountDialog();
+            EditAccountDialog addDialog = new EditAccountDialog();
+            Controller_EditAccountDialog dataContext = addDialog.DataContext as Controller_EditAccountDialog;
+            dataContext.WindowTitle = "add account";
             addDialog.ShowDialog();
             if (addDialog.DialogResult == true)
             {
-                Controller_AddAccountDialog ctrl = addDialog.DataContext as Controller_AddAccountDialog;
-                AccountItems.Add(ctrl.AccountData[0]);
+                AccountItems.Add(dataContext.AccountData[0]);
+                OnPropertyChanged("AccountItems");
+            }
+        }
+
+        private void DeleteAccountDetailsHandler(ListViewItem obj)
+        {
+            if (GeneralExtensions.ShowDecisionMessage(
+                "Do you really want to delete this account-info?") == System.Windows.Forms.DialogResult.No) return;
+            AccountItems.Remove(obj.Content as AccountItem);
+            OnPropertyChanged("AccountItems");
+        }
+
+        private void EditAccountDetailsHandler(ListViewItem obj)
+        {
+            EditAccountDialog addDialog = new EditAccountDialog();
+            Controller_EditAccountDialog dataContext = addDialog.DataContext as Controller_EditAccountDialog;
+            dataContext.WindowTitle = "edit account";
+            dataContext.AccountData.Clear();
+            addDialog.ShowDialog();
+            if (addDialog.DialogResult == true)
+            {
+                AccountItems.Remove(obj.Content as AccountItem);
+                AccountItems.Add(dataContext.AccountData[0]);
                 OnPropertyChanged("AccountItems");
             }
         }

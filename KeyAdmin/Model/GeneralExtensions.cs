@@ -25,5 +25,10 @@ namespace KeyAdmin.Model
         {
             MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        public static DialogResult ShowDecisionMessage(this string question)
+        {
+            return MessageBox.Show(question, "How do you want to continue...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
     }
 }

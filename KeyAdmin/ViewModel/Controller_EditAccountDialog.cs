@@ -12,7 +12,7 @@ using System.Windows.Controls;
 
 namespace KeyAdmin.ViewModel
 {
-    class Controller_AddAccountDialog : INotifyPropertyChanged
+    public class Controller_EditAccountDialog : INotifyPropertyChanged
     {
         #region members
         private ObservableCollection<AccountItem> _accountData = new ObservableCollection<AccountItem>();
@@ -20,6 +20,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand _addPropertie;
         private RelayCommand _deletePropertie;
         private RelayCommand<Window> _closeDialogOk;
+        private string _windowTitle;
         #endregion
 
         #region properties
@@ -36,17 +37,15 @@ namespace KeyAdmin.ViewModel
             }
         }
 
+        public string WindowTitle
+        {
+            get { return _windowTitle; }
+            set { _windowTitle = value; }
+        }
+
         public RelayCommand AddPropertie
         {
-            get
-            {
-                return _addPropertie;
-            }
-            set
-            {
-                _addPropertie = value;
-                OnPropertyChanged("AddPropertie");
-            }
+            get {return _addPropertie;}
         }
 
         public RelayCommand<Window> CloseDialogOk
@@ -72,20 +71,12 @@ namespace KeyAdmin.ViewModel
 
         public RelayCommand DeletePropertie
         {
-            get
-            {
-                return _deletePropertie;
-            }
-            set
-            {
-                _deletePropertie = value;
-                OnPropertyChanged("DeletePropertie");
-            }
+            get {return _deletePropertie;}
         }
         #endregion
 
         #region constructors
-        public Controller_AddAccountDialog()
+        public Controller_EditAccountDialog()
         {
             _addPropertie = new RelayCommand(AddPropertieHandler);
             _deletePropertie = new RelayCommand(DeletePropertieHandler);
@@ -99,7 +90,7 @@ namespace KeyAdmin.ViewModel
         }
         #endregion
 
-        #region events
+            #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
