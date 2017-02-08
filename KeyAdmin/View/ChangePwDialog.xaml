@@ -9,7 +9,8 @@
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         x:Name="Parent"
         mc:Ignorable="d"
-        Title="ChangePwDialog" Height="300" Width="400">
+        Icon="../favicon.ico"
+        Title="change password" Height="300" Width="400">
     <Window.DataContext>
         <vm:Controller_UI_Admission_Control/>
     </Window.DataContext>

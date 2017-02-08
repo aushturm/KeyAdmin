@@ -8,7 +8,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700">
+        Icon="../favicon.ico"
+        Title="Key Admin" Height="600" Width="700">
     <Window.DataContext>
         <vm:Controller_MainWindow/>
     </Window.DataContext>

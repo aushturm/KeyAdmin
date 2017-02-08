@@ -9,6 +9,7 @@
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         mc:Ignorable="d"
         Name="ParentWindow"
+        Icon="../favicon.ico"
         Title="{Binding WindowTitle}" Height="250" Width="400">
     <Window.DataContext>
         <vm:Controller_EditAccountDialog/>
