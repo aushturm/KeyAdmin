@@ -11,33 +11,56 @@ namespace KeyAdmin.Model
 {
     public static class PasswordHandler
     {
+        public static SecureString Entropy { set; private get; }
 
-        public static string EncryptString(this SecureString input, byte[] entropy)
+        public static string EncryptString(this SecureString input, SecureString entropy)
         {
-            byte[] encryptedData = ProtectedData.Protect(
-                Encoding.Unicode.GetBytes(ToInsecureString(input)),
-                entropy,
-                DataProtectionScope.CurrentUser);
+            byte[] encryptedData;
+            if (entropy == null)
+            {
+                encryptedData = ProtectedData.Protect(
+                    Encoding.Unicode.GetBytes(ToInsecureString(input)),
+                    Encoding.Unicode.GetBytes(ToInsecureString(Entropy)),
+                    DataProtectionScope.CurrentUser);
+            }
+            else
+            {
+                encryptedData = ProtectedData.Protect(
+                    Encoding.Unicode.GetBytes(ToInsecureString(input)),
+                    Encoding.Unicode.GetBytes(ToInsecureString(entropy)),
+                    DataProtectionScope.CurrentUser);
+            }
             return Convert.ToBase64String(encryptedData);
         }
 
-        public static SecureString DecryptString(this string encryptedData, byte[] entropy)
+        public static SecureString DecryptString(this string encryptedData, SecureString entropy)
         {
             try
             {
-                byte[] decryptedData = ProtectedData.Unprotect(
+                byte[] decryptedData;
+                if (entropy == null)
+                {
+                    decryptedData = ProtectedData.Unprotect(
                     Convert.FromBase64String(encryptedData),
-                    entropy,
+                    Encoding.Unicode.GetBytes(ToInsecureString(Entropy)),
                     DataProtectionScope.CurrentUser);
+                }
+                else
+                {
+                    decryptedData = ProtectedData.Unprotect(
+                    Convert.FromBase64String(encryptedData),
+                    Encoding.Unicode.GetBytes(ToInsecureString(entropy)),
+                    DataProtectionScope.CurrentUser);
+                }
                 return ToSecureString(Encoding.Unicode.GetString(decryptedData));
             }
             catch
             {
-                return new SecureString();
+                return null;
             }
         }
 
-        public static SecureString ToSecureString(string input)
+        public static SecureString ToSecureString(this string input)
         {
             SecureString secure = new SecureString();
             foreach (char c in input)

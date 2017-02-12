@@ -11,16 +11,18 @@ using GalaSoft.MvvmLight.Command;
 using KeyAdmin.View;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Security;
 
 namespace KeyAdmin.ViewModel
 {
     class Controller_UI_Main_Page : IUIPages, INotifyPropertyChanged
     {
         #region members
-        private ObservableCollection<AccountItem> _accountItems = new ObservableCollection<AccountItem>();
+        private ObservableCollection<AccountItem> _accountItems = Properties.Settings.Default.AccountItems;
         private RelayCommand _addAccountDetails;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
         private RelayCommand<ListViewItem> _editAccountDetails;
+        private object[] _parameters;
         #endregion
 
         #region properties
@@ -34,6 +36,14 @@ namespace KeyAdmin.ViewModel
             {
                 _accountItems = value;
                 OnPropertyChanged("AccountItems");
+            }
+        }
+
+        public object[] Parameters
+        {
+            set
+            {
+                _parameters = value;
             }
         }
 
@@ -57,6 +67,8 @@ namespace KeyAdmin.ViewModel
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
             _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
+
+            DecryptPasswords();
         }
         #endregion
 
@@ -119,6 +131,20 @@ namespace KeyAdmin.ViewModel
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+
+        #region private functions
+        private void DecryptPasswords()
+        {
+            foreach(AccountItem item in _accountItems)
+            {
+                AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
+                                          || x.Identifier.Trim().ToLower() == "pw"
+                                          || x.Identifier.Trim().ToLower() == "passwort");
+                if (pw != null)
+                    pw.Value = pw.Value.DecryptString(null).ToInsecureString();
             }
         }
         #endregion

@@ -11,5 +11,6 @@ namespace KeyAdmin.Interfaces
     public interface IUIPages
     {
         event EventHandler<EventArgs.ViewStateChangedEventArgs> ViewStateChanged;
+        object[] Parameters { set; }
     }
 }

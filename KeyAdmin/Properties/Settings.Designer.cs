@@ -34,5 +34,20 @@ namespace KeyAdmin.Properties {
                 this["Password"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public System.Collections.ObjectModel.ObservableCollection<KeyAdmin.Model.AccountItem> AccountItems
+        {
+            get
+            {
+                return ((System.Collections.ObjectModel.ObservableCollection<KeyAdmin.Model.AccountItem>)(this["AccountItems"]));
+            }
+            set
+            {
+                this["AccountItems"] = value;
+            }
+        }
     }
 }

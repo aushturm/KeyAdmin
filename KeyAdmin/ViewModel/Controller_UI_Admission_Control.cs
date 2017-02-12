@@ -20,6 +20,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand<object> _login;
         private RelayCommand _openPWDialog;
         private RelayCommand<object> _changePassword;
+        private SecureString _entropy;
         #endregion
 
         #region events
@@ -40,6 +41,14 @@ namespace KeyAdmin.ViewModel
         public RelayCommand<object> ChangePassword
         {
             get { return _changePassword; }
+        }
+
+        public object[] Parameters
+        {
+            set
+            {
+                _entropy = value[0] as SecureString;
+            }
         }
         #endregion
 
@@ -66,12 +75,12 @@ namespace KeyAdmin.ViewModel
                 var oldPassword = passwordContainer.OldPassword;
                 var newPassword = passwordContainer.NewPassword;
                 var confirmPassword = passwordContainer.ConfirmPassword;
-                var password = Settings.Default.Password.DecryptString(Encoding.Unicode.GetBytes(oldPassword.ToInsecureString()));
+                var password = Settings.Default.Password.DecryptString(oldPassword);
                 if (oldPassword.SecureStringEqual(password))
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
-                        Settings.Default.Password = newPassword.EncryptString(Encoding.Unicode.GetBytes(newPassword.ToInsecureString()));
+                        Settings.Default.Password = newPassword.EncryptString(newPassword);
                         Window dialog = passwordContainer as Window;
                         dialog.Close();
                         GeneralExtensions.ShowInfoMessage("Password successfully changed!");
@@ -94,11 +103,12 @@ namespace KeyAdmin.ViewModel
             if (passwordContainer != null)
             {
                 var userPassword = passwordContainer.Password;
-                var password = Settings.Default.Password.DecryptString(Encoding.Unicode.GetBytes(userPassword.ToInsecureString()));
+                var password = Settings.Default.Password.DecryptString(userPassword);
                 if (userPassword.SecureStringEqual(password))
                 {
+                    PasswordHandler.Entropy = password;
                     OnViewStateChanged(new ViewStateChangedEventArgs()
-                    {  Message = "Access permitted", viewState = ViewState.Finished});
+                    { Message = "Access permitted", viewState = ViewState.Finished });
                 }
                 else
                 {

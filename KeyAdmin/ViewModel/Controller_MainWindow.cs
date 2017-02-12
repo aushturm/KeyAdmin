@@ -63,6 +63,7 @@ namespace KeyAdmin.ViewModel
             UI_Main_Page mainPage = new UI_Main_Page();
             IUIPages pageControl = mainPage.DataContext as IUIPages;
             pageControl.ViewStateChanged += Display_View_ViewStateChanged;
+            pageControl.Parameters = e.Parameters;
             Display_View = mainPage;
         }
         #endregion

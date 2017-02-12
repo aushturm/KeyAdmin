@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using KeyAdmin.Properties;
+using KeyAdmin.Model;
 
 namespace KeyAdmin
 {
@@ -22,6 +23,14 @@ namespace KeyAdmin
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            foreach (AccountItem item in Settings.Default.AccountItems)
+            {
+                AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password"
+                                          || x.Identifier.Trim().ToLower() == "pw"
+                                          || x.Identifier.Trim().ToLower() == "passwort");
+                if (pw != null)
+                    pw.Value = pw.Value.ToSecureString().EncryptString(null);
+            }
             Settings.Default.Save();
         }
     }
