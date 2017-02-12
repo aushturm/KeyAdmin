@@ -75,8 +75,7 @@ namespace KeyAdmin.ViewModel
                 var oldPassword = passwordContainer.OldPassword;
                 var newPassword = passwordContainer.NewPassword;
                 var confirmPassword = passwordContainer.ConfirmPassword;
-                var password = Settings.Default.Password.DecryptString(oldPassword);
-                if (oldPassword.SecureStringEqual(password))
+                if (Settings.Default.Password.DecryptString(oldPassword) != null)
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
@@ -103,10 +102,9 @@ namespace KeyAdmin.ViewModel
             if (passwordContainer != null)
             {
                 var userPassword = passwordContainer.Password;
-                var password = Settings.Default.Password.DecryptString(userPassword);
-                if (userPassword.SecureStringEqual(password))
+                if (Settings.Default.Password.DecryptString(userPassword) != null)
                 {
-                    PasswordHandler.Entropy = password;
+                    PasswordHandler.Entropy = userPassword;
                     OnViewStateChanged(new ViewStateChangedEventArgs()
                     { Message = "Access permitted", viewState = ViewState.Finished });
                 }

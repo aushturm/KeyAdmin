@@ -140,11 +140,14 @@ namespace KeyAdmin.ViewModel
         {
             foreach(AccountItem item in _accountItems)
             {
-                AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
-                                          || x.Identifier.Trim().ToLower() == "pw"
-                                          || x.Identifier.Trim().ToLower() == "passwort");
-                if (pw != null)
-                    pw.Value = pw.Value.DecryptString(null).ToInsecureString();
+                //AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
+                //                          || x.Identifier.Trim().ToLower() == "pw"
+                //                          || x.Identifier.Trim().ToLower() == "passwort");
+                //if (pw != null)
+                foreach (AccountPropertiesItem propertie in item.Properties)
+                {
+                    propertie.Value = propertie.Value.DecryptString(null).ToInsecureString();
+                }
             }
         }
         #endregion
