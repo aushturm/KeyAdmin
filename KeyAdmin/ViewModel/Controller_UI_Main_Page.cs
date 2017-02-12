@@ -138,16 +138,24 @@ namespace KeyAdmin.ViewModel
         #region private functions
         private void DecryptPasswords()
         {
-            foreach(AccountItem item in _accountItems)
+            try
             {
-                //AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
-                //                          || x.Identifier.Trim().ToLower() == "pw"
-                //                          || x.Identifier.Trim().ToLower() == "passwort");
-                //if (pw != null)
-                foreach (AccountPropertiesItem propertie in item.Properties)
+                foreach (AccountItem item in _accountItems)
                 {
-                    propertie.Value = propertie.Value.DecryptString(null).ToInsecureString();
+                    //AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
+                    //                          || x.Identifier.Trim().ToLower() == "pw"
+                    //                          || x.Identifier.Trim().ToLower() == "passwort");
+                    //if (pw != null)
+                    foreach (AccountPropertiesItem propertie in item.Properties)
+                    {
+                        propertie.Value = propertie.Value.DecryptString(null).ToInsecureString();
+                        propertie.Identifier = propertie.Identifier.DecryptString(null).ToInsecureString();
+                    }
                 }
+            }
+            catch
+            {
+                GeneralExtensions.ShowErrorMessage("You hacked yourself in, but your new password is still wrong ;)\n\r Error: can't encrypt data");
             }
         }
         #endregion

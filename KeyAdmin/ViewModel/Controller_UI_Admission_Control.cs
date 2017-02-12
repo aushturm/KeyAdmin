@@ -75,7 +75,11 @@ namespace KeyAdmin.ViewModel
                 var oldPassword = passwordContainer.OldPassword;
                 var newPassword = passwordContainer.NewPassword;
                 var confirmPassword = passwordContainer.ConfirmPassword;
-                if (Settings.Default.Password.DecryptString(oldPassword) != null)
+                if (newPassword.Length < 1)
+                {
+                    GeneralExtensions.ShowErrorMessage("Your new password must have a length of minimum 1 character.");
+                }
+                if (Settings.Default.Password.DecryptString(oldPassword) != null || Settings.Default.Password == "")
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
@@ -102,6 +106,12 @@ namespace KeyAdmin.ViewModel
             if (passwordContainer != null)
             {
                 var userPassword = passwordContainer.Password;
+                var password = Settings.Default.Password;
+                if (password == "")
+                {
+                    GeneralExtensions.ShowErrorMessage("Set new password first");
+                    return;
+                }
                 if (Settings.Default.Password.DecryptString(userPassword) != null)
                 {
                     PasswordHandler.Entropy = userPassword;

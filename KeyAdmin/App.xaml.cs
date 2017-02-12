@@ -17,8 +17,15 @@ namespace KeyAdmin
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            View.MainWindow mainView = new View.MainWindow();
-            mainView.Show();
+            try
+            {
+                View.MainWindow mainView = new View.MainWindow();
+                mainView.Show();
+            }
+            catch (Exception ex)
+            {
+                GeneralExtensions.ShowErrorMessage(ex.Message);
+            }
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -32,6 +39,7 @@ namespace KeyAdmin
                 foreach(AccountPropertiesItem propertie in item.Properties)
                 {
                     propertie.Value = propertie.Value.ToSecureString().EncryptString(null);
+                    propertie.Identifier = propertie.Identifier.ToSecureString().EncryptString(null);
                 }
             }
             Settings.Default.Save();
