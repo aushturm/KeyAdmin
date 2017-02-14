@@ -15,6 +15,8 @@ namespace KeyAdmin.Model
 
         public static string EncryptString(this SecureString input, SecureString entropy)
         {
+            if (entropy == null && Entropy == null)
+                return null;
             byte[] encryptedData;
             if (entropy == null)
             {

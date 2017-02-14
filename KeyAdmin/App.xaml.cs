@@ -38,8 +38,10 @@ namespace KeyAdmin
                 //if (pw != null)
                 foreach(AccountPropertiesItem propertie in item.Properties)
                 {
-                    propertie.Value = propertie.Value.ToSecureString().EncryptString(null);
-                    propertie.Identifier = propertie.Identifier.ToSecureString().EncryptString(null);
+                    string value = propertie.Value.ToSecureString().EncryptString(null);
+                    string identifier = propertie.Identifier.ToSecureString().EncryptString(null);
+                    propertie.Value = (value != null) ? value : propertie.Value;
+                    propertie.Identifier = (identifier != null) ? identifier : propertie.Identifier;
                 }
             }
             Settings.Default.Save();

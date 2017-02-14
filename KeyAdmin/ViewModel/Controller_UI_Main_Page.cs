@@ -12,6 +12,8 @@ using KeyAdmin.View;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Security;
+using System.Windows.Input;
+using System.Windows;
 
 namespace KeyAdmin.ViewModel
 {
@@ -22,6 +24,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand _addAccountDetails;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
         private RelayCommand<ListViewItem> _editAccountDetails;
+        private RelayCommand<RoutedEventArgs> _pageLoaded;
         private object[] _parameters;
         #endregion
 
@@ -47,6 +50,11 @@ namespace KeyAdmin.ViewModel
             }
         }
 
+        public RelayCommand<RoutedEventArgs> PageLoaded
+        {
+            get { return _pageLoaded; }
+        }
+
         public RelayCommand AddAccountDetails
         {
             get { return _addAccountDetails; }
@@ -67,12 +75,27 @@ namespace KeyAdmin.ViewModel
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
             _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
+            _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
 
             DecryptPasswords();
         }
         #endregion
 
         #region event handlers
+
+        private void PageLoadedHandler(RoutedEventArgs e)
+        {
+            var control = e.OriginalSource as UserControl;
+            var win = Window.GetWindow(control);
+            win.KeyDown += Win_KeyDown;
+        }
+
+        private void Win_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                AddAccountDetailsHandler();
+        }
+
         private void AddAccountDetailsHandler()
         {
             EditAccountDialog addDialog = new EditAccountDialog();

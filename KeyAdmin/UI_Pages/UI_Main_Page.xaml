@@ -14,6 +14,12 @@
     <UserControl.DataContext>
         <vm:Controller_UI_Main_Page/>
     </UserControl.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <cmd:EventToCommand Command="{Binding PageLoaded}"
+                                PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.Resources>
         <CollectionViewSource x:Key="cvs" Source="{Binding Path=AccountItems, Mode=TwoWay}">
             <CollectionViewSource.SortDescriptions>
