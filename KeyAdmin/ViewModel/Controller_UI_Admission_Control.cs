@@ -141,6 +141,8 @@ namespace KeyAdmin.ViewModel
                                 item.Identifier = id.ToInsecureString();
                                 item.Identifier = item.Identifier.ToSecureString().EncryptString(newPassword);
                             }
+                            else
+                                errorCount++;
                             foreach (AccountPropertiesItem properties in item.Properties)
                             {
                                 var prpId = properties.Identifier.DecryptString(oldPassword);
@@ -149,6 +151,8 @@ namespace KeyAdmin.ViewModel
                                     properties.Identifier = prpId.ToInsecureString();
                                     properties.Identifier = properties.Identifier.ToSecureString().EncryptString(newPassword);
                                 }
+                                else
+                                    errorCount++;
 
                                 var valId = properties.Value.DecryptString(oldPassword);
                                 if (valId != null)
@@ -156,6 +160,8 @@ namespace KeyAdmin.ViewModel
                                     properties.Value = valId.ToInsecureString();
                                     properties.Value = properties.Value.ToSecureString().EncryptString(newPassword);
                                 }
+                                else
+                                    errorCount++;
                             }
                         }
                         if (errorCount > 0)
