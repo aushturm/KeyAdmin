@@ -14,6 +14,12 @@
     <Window.DataContext>
         <vm:Controller_EditAccountDialog/>
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <cmd:EventToCommand Command="{Binding WindowLoaded}"
+                                PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <ItemsControl ItemsSource="{Binding AccountData}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

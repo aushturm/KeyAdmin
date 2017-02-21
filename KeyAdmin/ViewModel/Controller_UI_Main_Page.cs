@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Security;
 using System.Windows.Input;
 using System.Windows;
+using KeyAdmin.Properties;
 
 namespace KeyAdmin.ViewModel
 {
@@ -77,7 +78,7 @@ namespace KeyAdmin.ViewModel
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
 
-            DecryptPasswords();
+            DecryptItems();
         }
         #endregion
 
@@ -87,7 +88,29 @@ namespace KeyAdmin.ViewModel
         {
             var control = e.OriginalSource as UserControl;
             var win = Window.GetWindow(control);
+            win.Closed += Win_Closed;
             win.KeyDown += Win_KeyDown;
+        }
+
+        private void Win_Closed(object sender, System.EventArgs e)
+        {
+            System.Windows.Forms.DialogResult result = GeneralExtensions.ShowDecisionMessage("Do you want to save changes?");
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                foreach (AccountItem item in Settings.Default.AccountItems)
+                {
+                    string itemId = item.Identifier.ToSecureString().EncryptString(null);
+                    item.Identifier = (itemId != null) ? itemId : item.Identifier;
+                    foreach (AccountPropertiesItem propertie in item.Properties)
+                    {
+                        string value = propertie.Value.ToSecureString().EncryptString(null);
+                        string identifier = propertie.Identifier.ToSecureString().EncryptString(null);
+                        propertie.Value = (value != null) ? value : propertie.Value;
+                        propertie.Identifier = (identifier != null) ? identifier : propertie.Identifier;
+                    }
+                }
+                Settings.Default.Save();
+            }
         }
 
         private void Win_KeyDown(object sender, KeyEventArgs e)
@@ -159,26 +182,19 @@ namespace KeyAdmin.ViewModel
         #endregion
 
         #region private functions
-        private void DecryptPasswords()
+        private void DecryptItems()
         {
-            try
+            foreach (AccountItem item in _accountItems)
             {
-                foreach (AccountItem item in _accountItems)
+                var itemId = item.Identifier.DecryptString(null);
+                item.Identifier = (itemId != null) ? itemId.ToInsecureString() : item.Identifier;
+                foreach (AccountPropertiesItem propertie in item.Properties)
                 {
-                    //AccountPropertiesItem pw = item.Properties.Find(x => x.Identifier.Trim().ToLower() == "password" 
-                    //                          || x.Identifier.Trim().ToLower() == "pw"
-                    //                          || x.Identifier.Trim().ToLower() == "passwort");
-                    //if (pw != null)
-                    foreach (AccountPropertiesItem propertie in item.Properties)
-                    {
-                        propertie.Value = propertie.Value.DecryptString(null).ToInsecureString();
-                        propertie.Identifier = propertie.Identifier.DecryptString(null).ToInsecureString();
-                    }
+                    var value = propertie.Value.DecryptString(null);
+                    propertie.Value = (value != null) ? value.ToInsecureString() : propertie.Value;
+                    var id = propertie.Identifier.DecryptString(null);
+                    propertie.Identifier = (id != null) ? id.ToInsecureString() : propertie.Identifier;
                 }
-            }
-            catch
-            {
-                GeneralExtensions.ShowErrorMessage("You hacked yourself in, but your new password is still wrong ;)\n\r Error: can't encrypt data");
             }
         }
         #endregion

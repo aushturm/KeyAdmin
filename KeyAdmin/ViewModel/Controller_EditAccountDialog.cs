@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace KeyAdmin.ViewModel
 {
@@ -20,6 +21,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand _addPropertie;
         private RelayCommand _deletePropertie;
         private RelayCommand<Window> _closeDialogOk;
+        private RelayCommand<RoutedEventArgs> _windowLoaded;
         private string _windowTitle;
         #endregion
 
@@ -35,6 +37,11 @@ namespace KeyAdmin.ViewModel
                 _accountData = value;
                 OnPropertyChanged("AccountData");
             }
+        }
+
+        public RelayCommand<RoutedEventArgs> WindowLoaded
+        {
+            get { return _windowLoaded; }
         }
 
         public string WindowTitle
@@ -81,6 +88,7 @@ namespace KeyAdmin.ViewModel
             _addPropertie = new RelayCommand(AddPropertieHandler);
             _deletePropertie = new RelayCommand(DeletePropertieHandler);
             _closeDialogOk = new RelayCommand<Window>(CloseDialogOkHandler);
+            _windowLoaded = new RelayCommand<RoutedEventArgs>(WindowLoadedHandler);
 
             List<AccountPropertiesItem> propertiesList = new List<AccountPropertiesItem>();
             AccountPropertiesItem properiesss = new AccountPropertiesItem() { Identifier = "name", Value = "value" };
@@ -90,7 +98,7 @@ namespace KeyAdmin.ViewModel
         }
         #endregion
 
-            #region events
+        #region events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
@@ -105,6 +113,21 @@ namespace KeyAdmin.ViewModel
         #endregion
 
         #region Event Handlers
+        private void WindowLoadedHandler(RoutedEventArgs obj)
+        {
+            var win = obj.OriginalSource as Window;
+            win.KeyDown += Win_KeyDown;
+        }
+
+        private void Win_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var win = e.OriginalSource as Window;
+                CloseDialogOkHandler(win);
+            }
+        }
+
         private void AddPropertieHandler()
         {
             AccountItem account = AccountData[0];
