@@ -123,7 +123,9 @@ namespace KeyAdmin.ViewModel
         {
             if (e.Key == Key.Enter)
             {
-                var win = e.OriginalSource as Window;
+                var win = Window.GetWindow(e.OriginalSource as DependencyObject);
+                if (win == null)
+                    return;
                 CloseDialogOkHandler(win);
             }
         }

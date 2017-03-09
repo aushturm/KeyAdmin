@@ -146,7 +146,10 @@ namespace KeyAdmin.ViewModel
             Controller_EditAccountDialog dataContext = addDialog.DataContext as Controller_EditAccountDialog;
             dataContext.WindowTitle = "edit account";
             dataContext.AccountData.Clear();
-            dataContext.AccountData.Add(obj.Content as AccountItem);
+            AccountItem item = obj.Content as AccountItem;
+            if (item == null)
+                return;
+            dataContext.AccountData.Add(item.Clone());
             addDialog.ShowDialog();
             if (addDialog.DialogResult == true)
             {
