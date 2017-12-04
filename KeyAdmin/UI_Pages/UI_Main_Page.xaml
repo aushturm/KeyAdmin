@@ -59,6 +59,20 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
+                <Button Grid.Column="2" Margin="0,0,10,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="export" Width="50" Height="23">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cmd:EventToCommand Command="{Binding Export}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Grid.Column="2" Margin="0,0,70,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="import" Width="50" Height="23">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cmd:EventToCommand Command="{Binding Import}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </Grid>
         </Border>
     </Grid>

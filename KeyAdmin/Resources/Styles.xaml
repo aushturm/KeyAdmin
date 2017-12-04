@@ -55,7 +55,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderThickness" Value="2"/>
                 <Setter Property="BorderBrush" Value="{StaticResource brs_lightblue}"/>
                 <Setter Property="Foreground" Value="{StaticResource brs_lightblue}"/>
             </Trigger>
@@ -67,7 +67,7 @@
     </Style>
 
     <Style TargetType="{x:Type PasswordBox}" x:Key="stl_adm_ctrl_pwbox">
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="{StaticResource brs_gold}"/>
         <Setter Property="Background" Value="{StaticResource brs_blue}"/>
 

@@ -15,6 +15,9 @@ using System.Security;
 using System.Windows.Input;
 using System.Windows;
 using KeyAdmin.Properties;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace KeyAdmin.ViewModel
 {
@@ -23,9 +26,11 @@ namespace KeyAdmin.ViewModel
         #region members
         private ObservableCollection<AccountItem> _accountItems = Properties.Settings.Default.AccountItems;
         private RelayCommand _addAccountDetails;
+        private RelayCommand _export;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
         private RelayCommand<ListViewItem> _editAccountDetails;
         private RelayCommand<RoutedEventArgs> _pageLoaded;
+        private RelayCommand _import;
         private object[] _parameters;
         #endregion
 
@@ -60,6 +65,14 @@ namespace KeyAdmin.ViewModel
         {
             get { return _addAccountDetails; }
         }
+        public RelayCommand Export
+        {
+            get { return _export; }
+        }
+        public RelayCommand Import
+        {
+            get { return _import; }
+        }
         public RelayCommand<ListViewItem> DeleteAccountDetails
         {
             get { return _deleteAccountDetails; }
@@ -74,9 +87,11 @@ namespace KeyAdmin.ViewModel
         public Controller_UI_Main_Page()
         {
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
+            _export = new RelayCommand(ExportHandler);
             _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
+            _import = new RelayCommand(ImportHandler);
 
             DecryptItems();
         }
@@ -132,6 +147,76 @@ namespace KeyAdmin.ViewModel
             }
         }
 
+        private void ImportHandler()
+        {
+            string fileName;
+            using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                openFileDialog.Title = "Select the file containing your xml to import.";
+                openFileDialog.CheckPathExists = true;
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                    return;
+                fileName = openFileDialog.FileName;
+            }
+
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
+                using (FileStream fileStream = new FileStream(fileName, FileMode.Open))
+                {
+                    DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
+                    _accountItems.Clear();
+                    foreach (AccountItem item in items.Data)
+                    {
+                        _accountItems.Add(item);
+                    }
+                }
+
+                $"Successfully imported Accountinformation from: {fileName}".ShowInfoMessage();
+            }
+            catch (Exception ex)
+            {
+                $"Failed to import Accountinformation: {ex.Message}".ShowErrorMessage();
+            }
+        }
+
+        private void ExportHandler()
+        {
+            string folderPath;
+            using (System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                saveFileDialog.Title = "Choose a folder to export into";
+                saveFileDialog.FileName = $"{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
+                saveFileDialog.AddExtension = true;
+                saveFileDialog.DefaultExt = ".xml";
+                saveFileDialog.Filter = "*.xml|*.*";
+                saveFileDialog.CheckPathExists = true;
+                if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                    return;
+                folderPath = saveFileDialog.FileName;
+            }
+
+            DeserializeItemHolder container = new DeserializeItemHolder
+            {
+                Data = _accountItems.ToList()
+            };
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
+                using (FileStream fileStream = new FileStream(folderPath, FileMode.CreateNew))
+                {
+                    serializer.Serialize(fileStream, container);
+                }
+
+                $"Successfully exported Accountinformation to: {folderPath}".ShowInfoMessage();
+            }
+
+            catch (Exception ex)
+            {
+                $"Failed to export Accountinformation: {ex.Message}".ShowErrorMessage();
+            }
+        }
+
         private void DeleteAccountDetailsHandler(ListViewItem obj)
         {
             if (GeneralExtensions.ShowDecisionMessage(
@@ -149,7 +234,7 @@ namespace KeyAdmin.ViewModel
             AccountItem item = obj.Content as AccountItem;
             if (item == null)
                 return;
-            dataContext.AccountData.Add(item.Clone());
+            dataContext.AccountData.Add((AccountItem)item.Clone());
             addDialog.ShowDialog();
             if (addDialog.DialogResult == true)
             {
