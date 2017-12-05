@@ -25,12 +25,15 @@ namespace KeyAdmin.ViewModel
     {
         #region members
         private ObservableCollection<AccountItem> _accountItems = Properties.Settings.Default.AccountItems;
+        private List<AccountItem> _accountItemsOriginal;
         private RelayCommand _addAccountDetails;
         private RelayCommand _export;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
         private RelayCommand<ListViewItem> _editAccountDetails;
         private RelayCommand<RoutedEventArgs> _pageLoaded;
         private RelayCommand _import;
+        private RelayCommand _SearchQueryChanged;
+        private string _searchQuery;
         private object[] _parameters;
         #endregion
 
@@ -45,6 +48,19 @@ namespace KeyAdmin.ViewModel
             {
                 _accountItems = value;
                 OnPropertyChanged("AccountItems");
+            }
+        }
+
+        public string SearchQuery
+        {
+            get
+            {
+                return _searchQuery;
+            }
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged("SearchQuery");
             }
         }
 
@@ -69,6 +85,10 @@ namespace KeyAdmin.ViewModel
         {
             get { return _export; }
         }
+        public RelayCommand SearchQueryChanged
+        {
+            get { return _SearchQueryChanged; }
+        }
         public RelayCommand Import
         {
             get { return _import; }
@@ -92,12 +112,35 @@ namespace KeyAdmin.ViewModel
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
             _import = new RelayCommand(ImportHandler);
+            _SearchQueryChanged = new RelayCommand(SearchQueryChangedHandler);
 
             DecryptItems();
+            _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
         }
         #endregion
 
         #region event handlers
+
+        private void SearchQueryChangedHandler()
+        {
+            if (SearchQuery == string.Empty)
+            {
+                InsertIntoAccountItems(_accountItemsOriginal);
+                return;
+            }
+
+            List<AccountItem> filteredItems = new List<AccountItem>(_accountItemsOriginal.Where(x => x.Identifier.ToLower().Trim().Contains(SearchQuery.ToLower().Trim())));
+            InsertIntoAccountItems(filteredItems);
+
+            void InsertIntoAccountItems(List<AccountItem> values)
+            {
+                _accountItems.Clear();
+                foreach (AccountItem item in values)
+                {
+                    _accountItems.Add((AccountItem)item.Clone());
+                }
+            }
+        }
 
         private void PageLoadedHandler(RoutedEventArgs e)
         {

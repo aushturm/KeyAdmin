@@ -10,7 +10,7 @@
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              mc:Ignorable="d" 
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             d:DesignHeight="300" d:DesignWidth="700">
+             d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.DataContext>
         <vm:Controller_UI_Main_Page/>
     </UserControl.DataContext>
@@ -35,7 +35,21 @@
         </Grid.RowDefinitions>
         <TextBlock FontFamily="Times New Roman" FontSize="30" FontStyle="Italic" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
         <Border Background="DarkRed">
-            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontFamily="Times New Roman" FontSize="20" FontStyle="Italic" FontWeight="Bold" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" MinWidth="{Binding ElementName=tb_title, Path=ActualWidth}"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Name="tb_title" VerticalAlignment="Center" Margin="5,0,0,0" FontFamily="Times New Roman" FontSize="20" FontStyle="Italic" FontWeight="Bold" Foreground="{StaticResource brs_gold}" Text="Key Admin"/>
+                <TextBox Name="tbx_Search" VerticalAlignment="Center" Margin="5" Grid.Column="1" Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <cmd:EventToCommand Command="{Binding SearchQueryChanged}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </Grid>
         </Border>
         <Border Grid.Row="1" BorderBrush="{StaticResource brs_blue}" BorderThickness="3">
             <ListView ItemsSource="{Binding Source={StaticResource cvs}}"
