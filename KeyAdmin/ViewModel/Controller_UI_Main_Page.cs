@@ -123,6 +123,9 @@ namespace KeyAdmin.ViewModel
 
         private void SearchQueryChangedHandler()
         {
+            if(_accountItemsOriginal.Count == _accountItems.Count)
+                _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
+
             if (SearchQuery == string.Empty)
             {
                 InsertIntoAccountItems(_accountItemsOriginal);
@@ -179,6 +182,7 @@ namespace KeyAdmin.ViewModel
 
         private void AddAccountDetailsHandler()
         {
+            SearchQuery = string.Empty;
             EditAccountDialog addDialog = new EditAccountDialog();
             Controller_EditAccountDialog dataContext = addDialog.DataContext as Controller_EditAccountDialog;
             dataContext.WindowTitle = "add account";
@@ -186,6 +190,7 @@ namespace KeyAdmin.ViewModel
             if (addDialog.DialogResult == true)
             {
                 AccountItems.Add(dataContext.AccountData[0]);
+                _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
                 OnPropertyChanged("AccountItems");
             }
         }
@@ -264,8 +269,15 @@ namespace KeyAdmin.ViewModel
         {
             if (GeneralExtensions.ShowDecisionMessage(
                 "Do you really want to delete this account-info?") == System.Windows.Forms.DialogResult.No) return;
-            AccountItems.Remove(obj.Content as AccountItem);
-            OnPropertyChanged("AccountItems");
+            if (obj.Content is AccountItem item)
+            {
+                _accountItemsOriginal.Remove(_accountItemsOriginal.First(x => x.Identifier == item.Identifier));
+                if (SearchQuery == string.Empty)
+                    SearchQueryChangedHandler();
+                else
+                    SearchQuery = string.Empty;
+                OnPropertyChanged("AccountItems");
+            }
         }
 
         private void EditAccountDetailsHandler(ListViewItem obj)
