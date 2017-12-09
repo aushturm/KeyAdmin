@@ -31,6 +31,8 @@ namespace KeyAdmin.Model
 
     public class AccountItem : ICloneable
     {
+        public string Guid = System.Guid.NewGuid().ToString();
+
         [XmlElement("Identifier")]
         public string Identifier { get; set; }
 

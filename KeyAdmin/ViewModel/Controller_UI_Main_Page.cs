@@ -123,26 +123,16 @@ namespace KeyAdmin.ViewModel
 
         private void SearchQueryChangedHandler()
         {
-            if(_accountItemsOriginal.Count == _accountItems.Count)
-                _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
-
             if (SearchQuery == string.Empty)
             {
                 InsertIntoAccountItems(_accountItemsOriginal);
                 return;
             }
 
-            List<AccountItem> filteredItems = new List<AccountItem>(_accountItemsOriginal.Where(x => x.Identifier.ToLower().Trim().Contains(SearchQuery.ToLower().Trim())));
+            List<AccountItem> filteredItems = new List<AccountItem>(_accountItemsOriginal.Where
+                                                                    (x => x.Identifier.ToLower().Trim().Contains(
+                                                                        SearchQuery.ToLower().Trim())));
             InsertIntoAccountItems(filteredItems);
-
-            void InsertIntoAccountItems(List<AccountItem> values)
-            {
-                _accountItems.Clear();
-                foreach (AccountItem item in values)
-                {
-                    _accountItems.Add((AccountItem)item.Clone());
-                }
-            }
         }
 
         private void PageLoadedHandler(RoutedEventArgs e)
@@ -158,7 +148,7 @@ namespace KeyAdmin.ViewModel
             System.Windows.Forms.DialogResult result = GeneralExtensions.ShowDecisionMessage("Do you want to save changes?");
             if (result == System.Windows.Forms.DialogResult.Yes)
             {
-                foreach (AccountItem item in Settings.Default.AccountItems)
+                foreach (AccountItem item in _accountItemsOriginal)
                 {
                     string itemId = item.Identifier.ToSecureString().EncryptString(null);
                     item.Identifier = (itemId != null) ? itemId : item.Identifier;
@@ -170,6 +160,7 @@ namespace KeyAdmin.ViewModel
                         propertie.Identifier = (identifier != null) ? identifier : propertie.Identifier;
                     }
                 }
+                InsertIntoAccountItems(_accountItemsOriginal);
                 Settings.Default.Save();
             }
         }
@@ -182,7 +173,6 @@ namespace KeyAdmin.ViewModel
 
         private void AddAccountDetailsHandler()
         {
-            SearchQuery = string.Empty;
             EditAccountDialog addDialog = new EditAccountDialog();
             Controller_EditAccountDialog dataContext = addDialog.DataContext as Controller_EditAccountDialog;
             dataContext.WindowTitle = "add account";
@@ -190,7 +180,7 @@ namespace KeyAdmin.ViewModel
             if (addDialog.DialogResult == true)
             {
                 AccountItems.Add(dataContext.AccountData[0]);
-                _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
+                _accountItemsOriginal.Add(dataContext.AccountData[0]);
                 OnPropertyChanged("AccountItems");
             }
         }
@@ -214,8 +204,10 @@ namespace KeyAdmin.ViewModel
                 {
                     DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
                     _accountItems.Clear();
+                    _accountItemsOriginal.Clear();
                     foreach (AccountItem item in items.Data)
                     {
+                        _accountItemsOriginal.Add((AccountItem)item.Clone());
                         _accountItems.Add(item);
                     }
                 }
@@ -246,7 +238,7 @@ namespace KeyAdmin.ViewModel
 
             DeserializeItemHolder container = new DeserializeItemHolder
             {
-                Data = _accountItems.ToList()
+                Data = _accountItemsOriginal
             };
             try
             {
@@ -271,11 +263,8 @@ namespace KeyAdmin.ViewModel
                 "Do you really want to delete this account-info?") == System.Windows.Forms.DialogResult.No) return;
             if (obj.Content is AccountItem item)
             {
-                _accountItemsOriginal.Remove(_accountItemsOriginal.First(x => x.Identifier == item.Identifier));
-                if (SearchQuery == string.Empty)
-                    SearchQueryChangedHandler();
-                else
-                    SearchQuery = string.Empty;
+                _accountItemsOriginal.Remove(_accountItemsOriginal.First(x => x.Guid == item.Guid));
+                _accountItems.Remove(item);
                 OnPropertyChanged("AccountItems");
             }
         }
@@ -325,6 +314,12 @@ namespace KeyAdmin.ViewModel
         #endregion
 
         #region private functions
+        private void InsertIntoAccountItems(List<AccountItem> values)
+        {
+            _accountItems.Clear();
+            values.ForEach(x => _accountItems.Add(x));
+        }
+
         private void DecryptItems()
         {
             foreach (AccountItem item in _accountItems)
