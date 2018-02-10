@@ -150,12 +150,12 @@ namespace KeyAdmin.ViewModel
             {
                 foreach (AccountItem item in _accountItemsOriginal)
                 {
-                    string itemId = item.Identifier.ToSecureString().EncryptString(null);
-                    item.Identifier = (itemId != null) ? itemId : item.Identifier;
+                    string itemId = item.Identifier.Encrypt(null);
+                    item.Identifier = itemId ?? item.Identifier;
                     foreach (AccountPropertiesItem propertie in item.Properties)
                     {
-                        string value = propertie.Value.ToSecureString().EncryptString(null);
-                        string identifier = propertie.Identifier.ToSecureString().EncryptString(null);
+                        string value = propertie.Value.Encrypt(null);
+                        string identifier = propertie.Identifier.Encrypt(null);
                         propertie.Value = (value != null) ? value : propertie.Value;
                         propertie.Identifier = (identifier != null) ? identifier : propertie.Identifier;
                     }
@@ -324,14 +324,14 @@ namespace KeyAdmin.ViewModel
         {
             foreach (AccountItem item in _accountItems)
             {
-                var itemId = item.Identifier.DecryptString(null);
-                item.Identifier = (itemId != null) ? itemId.ToInsecureString() : item.Identifier;
+                var itemId = item.Identifier.Decrypt(null);
+                item.Identifier = itemId ?? item.Identifier;
                 foreach (AccountPropertiesItem propertie in item.Properties)
                 {
-                    var value = propertie.Value.DecryptString(null);
-                    propertie.Value = (value != null) ? value.ToInsecureString() : propertie.Value;
-                    var id = propertie.Identifier.DecryptString(null);
-                    propertie.Identifier = (id != null) ? id.ToInsecureString() : propertie.Identifier;
+                    var value = propertie.Value.Decrypt(null);
+                    propertie.Value = value ?? propertie.Value;
+                    var id = propertie.Identifier.Decrypt(null);
+                    propertie.Identifier = id ?? propertie.Identifier;
                 }
             }
         }

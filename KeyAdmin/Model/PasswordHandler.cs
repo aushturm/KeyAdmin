@@ -11,7 +11,7 @@ namespace KeyAdmin.Model
 {
     public static class PasswordHandler
     {
-        public static SecureString Entropy { set; private get; }
+        public static SecureString Entropy { set; internal get; }
 
         public static string EncryptString(this SecureString input, SecureString entropy)
         {

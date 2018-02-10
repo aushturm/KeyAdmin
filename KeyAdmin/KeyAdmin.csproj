@@ -132,6 +132,7 @@
     <Compile Include="EventArgs\ViewStateChangedEventArgs.cs" />
     <Compile Include="Interfaces\IPasswords.cs" />
     <Compile Include="Interfaces\IViewState.cs" />
+    <Compile Include="Model\CryptoHandler.cs" />
     <Compile Include="Model\DataHolder.cs" />
     <Compile Include="Model\GeneralExtensions.cs" />
     <Compile Include="Model\PasswordHandler.cs" />

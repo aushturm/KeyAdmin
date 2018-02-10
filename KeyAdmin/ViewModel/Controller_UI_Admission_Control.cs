@@ -127,7 +127,7 @@ namespace KeyAdmin.ViewModel
                     GeneralExtensions.ShowErrorMessage("Your new password must have a length of minimum 1 character.");
                     return;
                 }
-                if (Settings.Default.Password.DecryptString(oldPassword) != null || 
+                if (Settings.Default.Password.Decrypt(oldPassword.ToInsecureString()) != null || 
                     Settings.Default.Password == "" && oldPassword.Length == 0)
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
@@ -135,30 +135,30 @@ namespace KeyAdmin.ViewModel
                         int errorCount = 0;
                         foreach(AccountItem item in Settings.Default.AccountItems)
                         {
-                            var id = item.Identifier.DecryptString(oldPassword);
+                            var id = item.Identifier.Decrypt(oldPassword.ToInsecureString());
                             if (id != null)
                             {
-                                item.Identifier = id.ToInsecureString();
-                                item.Identifier = item.Identifier.ToSecureString().EncryptString(newPassword);
+                                item.Identifier = id;
+                                item.Identifier = item.Identifier.Decrypt(newPassword.ToInsecureString());
                             }
                             else
                                 errorCount++;
                             foreach (AccountPropertiesItem properties in item.Properties)
                             {
-                                var prpId = properties.Identifier.DecryptString(oldPassword);
+                                var prpId = properties.Identifier.Decrypt(oldPassword.ToInsecureString());
                                 if (prpId != null)
                                 {
-                                    properties.Identifier = prpId.ToInsecureString();
-                                    properties.Identifier = properties.Identifier.ToSecureString().EncryptString(newPassword);
+                                    properties.Identifier = prpId;
+                                    properties.Identifier = properties.Identifier.Decrypt(newPassword.ToInsecureString());
                                 }
                                 else
                                     errorCount++;
 
-                                var valId = properties.Value.DecryptString(oldPassword);
+                                var valId = properties.Value.Decrypt(oldPassword.ToInsecureString());
                                 if (valId != null)
                                 {
-                                    properties.Value = valId.ToInsecureString();
-                                    properties.Value = properties.Value.ToSecureString().EncryptString(newPassword);
+                                    properties.Value = valId;
+                                    properties.Value = properties.Value.Encrypt(newPassword.ToInsecureString());
                                 }
                                 else
                                     errorCount++;
@@ -168,7 +168,7 @@ namespace KeyAdmin.ViewModel
                         {
                             GeneralExtensions.ShowErrorMessage(errorCount + "items failed to decrypt!");
                         }
-                        Settings.Default.Password = newPassword.EncryptString(newPassword);
+                        Settings.Default.Password = newPassword.ToInsecureString().Encrypt(newPassword.ToInsecureString());
                         Settings.Default.Save();
                         Window dialog = passwordContainer as Window;
                         dialog.Close();
@@ -198,7 +198,7 @@ namespace KeyAdmin.ViewModel
                     GeneralExtensions.ShowErrorMessage("Set new password first");
                     return;
                 }
-                if (Settings.Default.Password.DecryptString(userPassword) != null)
+                if (Settings.Default.Password.Decrypt(userPassword.ToInsecureString()) != null)
                 {
                     PasswordHandler.Entropy = userPassword;
                     OnViewStateChanged(new ViewStateChangedEventArgs()
