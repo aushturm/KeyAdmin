@@ -73,17 +73,31 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Grid.Column="2" Margin="0,0,10,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="export" Width="50" Height="23">
+                <Button Grid.Column="2" Margin="0,0,10,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="Plain Export" Width="80" Height="23">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <cmd:EventToCommand Command="{Binding Export}"/>
+                            <cmd:EventToCommand Command="{Binding PlainExport}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Grid.Column="2" Margin="0,0,70,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="import" Width="50" Height="23">
+                <Button Grid.Column="2" Margin="0,0,100,0" HorizontalAlignment="Right" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="Plain Import" Width="80" Height="23">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <cmd:EventToCommand Command="{Binding Import}"/>
+                            <cmd:EventToCommand Command="{Binding PlainImport}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Grid.Column="0" Margin="100,0,0,0" HorizontalAlignment="Left" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="Crypto Export" Width="80" Height="23">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cmd:EventToCommand Command="{Binding }"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Left" Style="{StaticResource default_button}" BitmapEffect="{x:Null}" Content="Crypto Import" Width="80" Height="23">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cmd:EventToCommand Command="{Binding }"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

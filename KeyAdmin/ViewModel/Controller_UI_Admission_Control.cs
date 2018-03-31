@@ -116,30 +116,29 @@ namespace KeyAdmin.ViewModel
 
         public void ChangePasswordHandler(object parameter)
         {
-            var passwordContainer = parameter as IHavePasswordsToChange;
-            if (passwordContainer != null)
+            if (parameter is IHavePasswordsToChange passwordContainer)
             {
                 var oldPassword = passwordContainer.OldPassword;
                 var newPassword = passwordContainer.NewPassword;
                 var confirmPassword = passwordContainer.ConfirmPassword;
-                if (newPassword.Length < 1)
+                if (newPassword.Length < 8)
                 {
-                    GeneralExtensions.ShowErrorMessage("Your new password must have a length of minimum 1 character.");
+                    GeneralExtensions.ShowErrorMessage("Your new password must have a length of minimum 8 character.");
                     return;
                 }
-                if (Settings.Default.Password.Decrypt(oldPassword.ToInsecureString()) != null || 
-                    Settings.Default.Password == "" && oldPassword.Length == 0)
+                if (Settings.Default.Password == "" && oldPassword.Length == 0 || 
+                    Settings.Default.Password.Decrypt(oldPassword.ToInsecureString()) != null)
                 {
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
                         int errorCount = 0;
-                        foreach(AccountItem item in Settings.Default.AccountItems)
+                        foreach (AccountItem item in Settings.Default.AccountItems)
                         {
                             var id = item.Identifier.Decrypt(oldPassword.ToInsecureString());
                             if (id != null)
                             {
                                 item.Identifier = id;
-                                item.Identifier = item.Identifier.Decrypt(newPassword.ToInsecureString());
+                                item.Identifier = item.Identifier.Encrypt(newPassword.ToInsecureString());
                             }
                             else
                                 errorCount++;
@@ -149,7 +148,7 @@ namespace KeyAdmin.ViewModel
                                 if (prpId != null)
                                 {
                                     properties.Identifier = prpId;
-                                    properties.Identifier = properties.Identifier.Decrypt(newPassword.ToInsecureString());
+                                    properties.Identifier = properties.Identifier.Encrypt(newPassword.ToInsecureString());
                                 }
                                 else
                                     errorCount++;

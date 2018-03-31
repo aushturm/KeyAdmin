@@ -27,11 +27,13 @@ namespace KeyAdmin.ViewModel
         private ObservableCollection<AccountItem> _accountItems = Properties.Settings.Default.AccountItems;
         private List<AccountItem> _accountItemsOriginal;
         private RelayCommand _addAccountDetails;
-        private RelayCommand _export;
+        private RelayCommand _plainExport;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
         private RelayCommand<ListViewItem> _editAccountDetails;
         private RelayCommand<RoutedEventArgs> _pageLoaded;
-        private RelayCommand _import;
+        private RelayCommand _plainImport;
+        private RelayCommand _cryptoImport;
+        private RelayCommand _cryptoExport;
         private RelayCommand _SearchQueryChanged;
         private string _searchQuery;
         private object[] _parameters;
@@ -81,17 +83,25 @@ namespace KeyAdmin.ViewModel
         {
             get { return _addAccountDetails; }
         }
-        public RelayCommand Export
+        public RelayCommand PlainExport
         {
-            get { return _export; }
+            get { return _plainExport; }
         }
         public RelayCommand SearchQueryChanged
         {
             get { return _SearchQueryChanged; }
         }
-        public RelayCommand Import
+        public RelayCommand PlainImport
         {
-            get { return _import; }
+            get { return _plainImport; }
+        }
+        public RelayCommand CryptoImport
+        {
+            get { return _cryptoImport; }
+        }
+        public RelayCommand CryptoExport
+        {
+            get { return _cryptoExport; }
         }
         public RelayCommand<ListViewItem> DeleteAccountDetails
         {
@@ -107,12 +117,14 @@ namespace KeyAdmin.ViewModel
         public Controller_UI_Main_Page()
         {
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
-            _export = new RelayCommand(ExportHandler);
+            _plainExport = new RelayCommand(ExportHandler);
             _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
-            _import = new RelayCommand(ImportHandler);
+            _plainImport = new RelayCommand(ImportHandler);
             _SearchQueryChanged = new RelayCommand(SearchQueryChangedHandler);
+            _cryptoExport = new RelayCommand(CryptoExportHandler);
+            _cryptoImport = new RelayCommand(CryptoImportHandler);
 
             DecryptItems();
             _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
@@ -120,6 +132,16 @@ namespace KeyAdmin.ViewModel
         #endregion
 
         #region event handlers
+
+        private void CryptoImportHandler()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CryptoExportHandler()
+        {
+            throw new NotImplementedException();
+        }
 
         private void SearchQueryChangedHandler()
         {
@@ -284,6 +306,8 @@ namespace KeyAdmin.ViewModel
             {
                 AccountItems.Remove(obj.Content as AccountItem);
                 AccountItems.Add(dataContext.AccountData[0]);
+                _accountItemsOriginal.Remove(_accountItemsOriginal.First(x => x.Guid == item.Guid));
+                _accountItemsOriginal.Add(dataContext.AccountData[0]);
                 OnPropertyChanged("AccountItems");
             }
         }

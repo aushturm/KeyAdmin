@@ -18,6 +18,10 @@ namespace KeyAdmin.Model
 
         public static string Encrypt(this string plainText, string passPhrase)
         {
+            if(plainText == "abcd")
+            { }
+            if(plainText == "account name")
+            { }
             try
             {
                 // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
@@ -58,10 +62,9 @@ namespace KeyAdmin.Model
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                GeneralExtensions.ShowErrorMessage(ex.Message);
-                return "Failed decrypted string";
+                return null;
             }
         }
 
@@ -80,7 +83,12 @@ namespace KeyAdmin.Model
                 var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((Keysize / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((Keysize / 8) * 2)).ToArray();
 
                 if (string.IsNullOrEmpty(passPhrase))
-                    passPhrase = PasswordHandler.Entropy.ToInsecureString();
+                {
+                    if (PasswordHandler.Entropy == null)
+                        return null;
+                    else
+                        passPhrase = PasswordHandler.Entropy.ToInsecureString();
+                }
 
                 using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
                 {
@@ -107,10 +115,9 @@ namespace KeyAdmin.Model
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                GeneralExtensions.ShowErrorMessage(ex.Message);
-                return "Failed decrypted string";
+                return null;
             }
         }
 
