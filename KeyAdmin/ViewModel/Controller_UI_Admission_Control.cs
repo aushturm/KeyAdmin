@@ -14,6 +14,8 @@ using KeyAdmin.EventArgs;
 using System.Windows.Input;
 using System.Windows.Controls;
 using KeyAdmin.View;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace KeyAdmin.ViewModel
 {
@@ -108,14 +110,17 @@ namespace KeyAdmin.ViewModel
                         return;
                     }
                 }
-                IHavePasswordsToChange win = Window.GetWindow(control) as IHavePasswordsToChange;
-                if (win != null)
+                if (Window.GetWindow(control) is IHavePasswordsToChange win)
                     ChangePasswordHandler(win);
             }
         }
 
         public void ChangePasswordHandler(object parameter)
         {
+            if(string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
+            {
+#warning create new file here
+            }
             if (parameter is IHavePasswordsToChange passwordContainer)
             {
                 var oldPassword = passwordContainer.OldPassword;
@@ -132,6 +137,7 @@ namespace KeyAdmin.ViewModel
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
                         int errorCount = 0;
+                        List<AccountItem> accountItems = LoadAccountItems();
                         foreach (AccountItem item in Settings.Default.AccountItems)
                         {
                             var id = item.Identifier.Decrypt(oldPassword.ToInsecureString());
@@ -185,14 +191,29 @@ namespace KeyAdmin.ViewModel
             }
         }
 
+        private List<AccountItem> LoadAccountItems()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
+            using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.Open))
+            {
+                DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
+                List<AccountItem> accountItems = new List<AccountItem>();
+                foreach (AccountItem item in items.Data)
+                {
+                    accountItems.Add(item);
+                }
+                return accountItems;
+            }
+        }
+
         private void LoginHandler(object parameter)
         {
-            var passwordContainer = parameter as IHavePassword;
-            if (passwordContainer != null)
+            if (parameter is IHavePassword passwordContainer)
             {
                 var userPassword = passwordContainer.Password;
                 var password = Settings.Default.Password;
-                if (password == "")
+
+                if (password == string.Empty)
                 {
                     GeneralExtensions.ShowErrorMessage("Set new password first");
                     return;

@@ -24,7 +24,7 @@ namespace KeyAdmin.ViewModel
     class Controller_UI_Main_Page : IUIPages, INotifyPropertyChanged
     {
         #region members
-        private ObservableCollection<AccountItem> _accountItems = Properties.Settings.Default.AccountItems;
+        private ObservableCollection<AccountItem> _accountItems = new ObservableCollection<AccountItem>();
         private List<AccountItem> _accountItemsOriginal;
         private RelayCommand _addAccountDetails;
         private RelayCommand _plainExport;
@@ -32,7 +32,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand<ListViewItem> _editAccountDetails;
         private RelayCommand<RoutedEventArgs> _pageLoaded;
         private RelayCommand _plainImport;
-        private RelayCommand _cryptoImport;
+        private RelayCommand<bool> _cryptoImport;
         private RelayCommand _cryptoExport;
         private RelayCommand _SearchQueryChanged;
         private string _searchQuery;
@@ -95,7 +95,7 @@ namespace KeyAdmin.ViewModel
         {
             get { return _plainImport; }
         }
-        public RelayCommand CryptoImport
+        public RelayCommand<bool> CryptoImport
         {
             get { return _cryptoImport; }
         }
@@ -124,23 +124,87 @@ namespace KeyAdmin.ViewModel
             _plainImport = new RelayCommand(ImportHandler);
             _SearchQueryChanged = new RelayCommand(SearchQueryChangedHandler);
             _cryptoExport = new RelayCommand(CryptoExportHandler);
-            _cryptoImport = new RelayCommand(CryptoImportHandler);
+            _cryptoImport = new RelayCommand<bool>(CryptoImportHandler);
 
-            DecryptItems();
-            _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
+            if (!string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
+                CryptoImportHandler(true);
         }
         #endregion
 
         #region event handlers
 
-        private void CryptoImportHandler()
+        private void CryptoImportHandler(bool useOFD = false)
         {
-            throw new NotImplementedException();
+            if (useOFD)
+            {
+                using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+                {
+                    openFileDialog.Title = "Select the file containing your xml to import.";
+                    openFileDialog.CheckPathExists = true;
+                    if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                        return;
+                    Settings.Default.DefaultFilePath = openFileDialog.FileName;
+                    Settings.Default.Save();
+                }
+            }
+
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
+                using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.Open))
+                {
+                    DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
+                    _accountItems.Clear();
+                    _accountItemsOriginal.Clear();
+                    foreach (AccountItem item in items.Data)
+                    {
+                        _accountItems.Add(item);
+                    }
+                    DecryptItems();
+                    _accountItemsOriginal = new List<AccountItem>(_accountItems.ToList());
+                }
+
+                $"Successfully imported Accountinformation from: {Settings.Default.DefaultFilePath}".ShowInfoMessage();
+            }
+            catch (Exception ex)
+            {
+                $"Failed to import Accountinformation: {ex.Message}".ShowErrorMessage();
+            }
         }
 
         private void CryptoExportHandler()
         {
-            throw new NotImplementedException();
+            foreach (AccountItem item in _accountItemsOriginal)
+            {
+                string itemId = item.Identifier.Encrypt(null);
+                item.Identifier = itemId ?? item.Identifier;
+                foreach (AccountPropertiesItem propertie in item.Properties)
+                {
+                    string value = propertie.Value.Encrypt(null);
+                    string identifier = propertie.Identifier.Encrypt(null);
+                    propertie.Value = value ?? propertie.Value;
+                    propertie.Identifier = identifier ?? propertie.Identifier;
+                }
+            }
+            DeserializeItemHolder container = new DeserializeItemHolder
+            {
+                Data = _accountItemsOriginal
+            };
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
+                using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.CreateNew))
+                {
+                    serializer.Serialize(fileStream, container);
+                }
+
+                $"Successfully exported Accountinformation to: {Settings.Default.DefaultFilePath}".ShowInfoMessage();
+            }
+
+            catch (Exception ex)
+            {
+                $"Failed to export Accountinformation: {ex.Message}".ShowErrorMessage();
+            }
         }
 
         private void SearchQueryChangedHandler()
@@ -170,20 +234,7 @@ namespace KeyAdmin.ViewModel
             System.Windows.Forms.DialogResult result = GeneralExtensions.ShowDecisionMessage("Do you want to save changes?");
             if (result == System.Windows.Forms.DialogResult.Yes)
             {
-                foreach (AccountItem item in _accountItemsOriginal)
-                {
-                    string itemId = item.Identifier.Encrypt(null);
-                    item.Identifier = itemId ?? item.Identifier;
-                    foreach (AccountPropertiesItem propertie in item.Properties)
-                    {
-                        string value = propertie.Value.Encrypt(null);
-                        string identifier = propertie.Identifier.Encrypt(null);
-                        propertie.Value = (value != null) ? value : propertie.Value;
-                        propertie.Identifier = (identifier != null) ? identifier : propertie.Identifier;
-                    }
-                }
-                InsertIntoAccountItems(_accountItemsOriginal);
-                Settings.Default.Save();
+                CryptoExportHandler();
             }
         }
 
