@@ -119,7 +119,10 @@ namespace KeyAdmin.ViewModel
         {
             if(string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
             {
-#warning create new file here
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Settings.Default.DefaultFilePath = path += $"{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
+                File.Create(Settings.Default.DefaultFilePath);
+                Settings.Default.Save();
             }
             if (parameter is IHavePasswordsToChange passwordContainer)
             {
@@ -138,7 +141,7 @@ namespace KeyAdmin.ViewModel
                     {
                         int errorCount = 0;
                         List<AccountItem> accountItems = LoadAccountItems();
-                        foreach (AccountItem item in Settings.Default.AccountItems)
+                        foreach (AccountItem item in LoadAccountItems())
                         {
                             var id = item.Identifier.Decrypt(oldPassword.ToInsecureString());
                             if (id != null)
@@ -196,13 +199,19 @@ namespace KeyAdmin.ViewModel
             XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
             using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.Open))
             {
-                DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
-                List<AccountItem> accountItems = new List<AccountItem>();
-                foreach (AccountItem item in items.Data)
+                DeserializeItemHolder items;
+                try
                 {
-                    accountItems.Add(item);
+                    items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
                 }
-                return accountItems;
+                catch (InvalidOperationException) { return new List<AccountItem>(); }//document is empty
+
+                List<AccountItem> accountItems = new List<AccountItem>();
+                    foreach (AccountItem item in items.Data)
+                    {
+                        accountItems.Add(item);
+                    }
+                    return accountItems;
             }
         }
 

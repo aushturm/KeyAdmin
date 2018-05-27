@@ -25,7 +25,7 @@ namespace KeyAdmin.ViewModel
     {
         #region members
         private ObservableCollection<AccountItem> _accountItems = new ObservableCollection<AccountItem>();
-        private List<AccountItem> _accountItemsOriginal;
+        private List<AccountItem> _accountItemsOriginal = new List<AccountItem>();
         private RelayCommand _addAccountDetails;
         private RelayCommand _plainExport;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
@@ -33,7 +33,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand<RoutedEventArgs> _pageLoaded;
         private RelayCommand _plainImport;
         private RelayCommand<bool> _cryptoImport;
-        private RelayCommand _cryptoExport;
+        private RelayCommand<bool> _cryptoExport;
         private RelayCommand _SearchQueryChanged;
         private string _searchQuery;
         private object[] _parameters;
@@ -99,7 +99,7 @@ namespace KeyAdmin.ViewModel
         {
             get { return _cryptoImport; }
         }
-        public RelayCommand CryptoExport
+        public RelayCommand<bool> CryptoExport
         {
             get { return _cryptoExport; }
         }
@@ -123,19 +123,19 @@ namespace KeyAdmin.ViewModel
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
             _plainImport = new RelayCommand(ImportHandler);
             _SearchQueryChanged = new RelayCommand(SearchQueryChangedHandler);
-            _cryptoExport = new RelayCommand(CryptoExportHandler);
+            _cryptoExport = new RelayCommand<bool>(CryptoExportHandler);
             _cryptoImport = new RelayCommand<bool>(CryptoImportHandler);
 
             if (!string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
-                CryptoImportHandler(true);
+                CryptoImportHandler();
         }
         #endregion
 
         #region event handlers
 
-        private void CryptoImportHandler(bool useOFD = false)
+        private void CryptoImportHandler(bool isSystem = true)
         {
-            if (useOFD)
+            if (!isSystem)
             {
                 using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
                 {
@@ -153,7 +153,13 @@ namespace KeyAdmin.ViewModel
                 XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
                 using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.Open))
                 {
-                    DeserializeItemHolder items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
+                    DeserializeItemHolder items;
+                    try
+                    {
+                        items = (DeserializeItemHolder)serializer.Deserialize(fileStream);
+                    }
+                    catch (InvalidOperationException) {return; }//document is empty
+
                     _accountItems.Clear();
                     _accountItemsOriginal.Clear();
                     foreach (AccountItem item in items.Data)
@@ -172,8 +178,25 @@ namespace KeyAdmin.ViewModel
             }
         }
 
-        private void CryptoExportHandler()
+        private void CryptoExportHandler(bool isSystem = true)
         {
+            if (!isSystem)
+            {
+                using (System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog())
+                {
+                    saveFileDialog.Title = "Choose a folder to export into";
+                    saveFileDialog.FileName = $"{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
+                    saveFileDialog.AddExtension = true;
+                    saveFileDialog.DefaultExt = ".xml";
+                    saveFileDialog.Filter = "*.xml|*.*";
+                    saveFileDialog.CheckPathExists = true;
+                    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                        return;
+                    Settings.Default.DefaultFilePath = saveFileDialog.FileName;
+                    Settings.Default.Save();
+                }
+            }
+
             foreach (AccountItem item in _accountItemsOriginal)
             {
                 string itemId = item.Identifier.Encrypt(null);
@@ -193,7 +216,7 @@ namespace KeyAdmin.ViewModel
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(DeserializeItemHolder));
-                using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.CreateNew))
+                using (FileStream fileStream = new FileStream(Settings.Default.DefaultFilePath, FileMode.Create))
                 {
                     serializer.Serialize(fileStream, container);
                 }
@@ -284,6 +307,9 @@ namespace KeyAdmin.ViewModel
                         _accountItems.Add(item);
                     }
                 }
+
+                Settings.Default.DefaultFilePath = Path.GetDirectoryName(fileName) + $@"\{DateTime.Now.ToString("yyyyMMdd")}_Passwords_KeyAdmin.xml";
+                Settings.Default.Save();
 
                 $"Successfully imported Accountinformation from: {fileName}".ShowInfoMessage();
             }
