@@ -126,8 +126,15 @@ namespace KeyAdmin.ViewModel
             _cryptoExport = new RelayCommand<bool>(CryptoExportHandler);
             _cryptoImport = new RelayCommand<bool>(CryptoImportHandler);
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath) && File.Exists(Settings.Default.DefaultFilePath))
                 CryptoImportHandler();
+            else
+            {
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Settings.Default.DefaultFilePath = path + $"\\{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
+                File.Create(Settings.Default.DefaultFilePath);
+                Settings.Default.Save();
+            }
         }
         #endregion
 

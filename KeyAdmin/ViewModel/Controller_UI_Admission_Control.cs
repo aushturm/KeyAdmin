@@ -120,8 +120,8 @@ namespace KeyAdmin.ViewModel
             if(string.IsNullOrWhiteSpace(Settings.Default.DefaultFilePath))
             {
                 string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                Settings.Default.DefaultFilePath = path += $"{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
-                File.Create(Settings.Default.DefaultFilePath);
+                Settings.Default.DefaultFilePath = path + $"\\{DateTime.Now.ToString("yyyyMMdd")}_Exported_Passwords_KeyAdmin.xml";
+                using (File.Create(Settings.Default.DefaultFilePath)) ;
                 Settings.Default.Save();
             }
             if (parameter is IHavePasswordsToChange passwordContainer)
@@ -140,7 +140,6 @@ namespace KeyAdmin.ViewModel
                     if (newPassword.SecureStringEqual(confirmPassword))
                     {
                         int errorCount = 0;
-                        List<AccountItem> accountItems = LoadAccountItems();
                         foreach (AccountItem item in LoadAccountItems())
                         {
                             var id = item.Identifier.Decrypt(oldPassword.ToInsecureString());
@@ -222,6 +221,14 @@ namespace KeyAdmin.ViewModel
                 var userPassword = passwordContainer.Password;
                 var password = Settings.Default.Password;
 
+                if(!string.IsNullOrEmpty(Settings.Default.DefaultFilePath) && !File.Exists(Settings.Default.DefaultFilePath))
+                {
+                    Settings.Default.DefaultFilePath = "";
+                    Settings.Default.Password = "";
+                    Settings.Default.Save();
+                    GeneralExtensions.ShowErrorMessage($"File '{Settings.Default.DefaultFilePath}' does not exist. Please set a new password.");
+                    return;
+                }
                 if (password == string.Empty)
                 {
                     GeneralExtensions.ShowErrorMessage("Set new password first");
