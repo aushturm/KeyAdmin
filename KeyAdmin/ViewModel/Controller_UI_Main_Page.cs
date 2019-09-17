@@ -18,6 +18,8 @@ using KeyAdmin.Properties;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Diagnostics;
+using System.Timers;
 
 namespace KeyAdmin.ViewModel
 {
@@ -29,6 +31,7 @@ namespace KeyAdmin.ViewModel
         private RelayCommand _addAccountDetails;
         private RelayCommand _plainExport;
         private RelayCommand<ListViewItem> _deleteAccountDetails;
+        private RelayCommand<ListViewItem> _copyPwToClipboard;
         private RelayCommand<ListViewItem> _editAccountDetails;
         private RelayCommand<RoutedEventArgs> _pageLoaded;
         private RelayCommand _plainImport;
@@ -37,6 +40,9 @@ namespace KeyAdmin.ViewModel
         private RelayCommand _SearchQueryChanged;
         private string _searchQuery;
         private object[] _parameters;
+        private Dictionary<string, string> _passwordStore = new Dictionary<string, string>();
+        private List<string> _pwAlias = new List<string> { "password", "passwort", "pw" };
+        private const string _pwPlaceholder = "***;)***";
         #endregion
 
         #region properties
@@ -107,6 +113,10 @@ namespace KeyAdmin.ViewModel
         {
             get { return _deleteAccountDetails; }
         }
+        public RelayCommand<ListViewItem> CopyPwToClipboard
+        {
+            get { return _copyPwToClipboard; }
+        }
         public RelayCommand<ListViewItem> EditAccountDetails
         {
             get { return _editAccountDetails; }
@@ -119,6 +129,7 @@ namespace KeyAdmin.ViewModel
             _addAccountDetails = new RelayCommand(AddAccountDetailsHandler);
             _plainExport = new RelayCommand(ExportHandler);
             _deleteAccountDetails = new RelayCommand<ListViewItem>(DeleteAccountDetailsHandler);
+            _copyPwToClipboard = new RelayCommand<ListViewItem>(CopyPwToClipboardHandler);
             _editAccountDetails = new RelayCommand<ListViewItem>(EditAccountDetailsHandler);
             _pageLoaded = new RelayCommand<RoutedEventArgs>(PageLoadedHandler);
             _plainImport = new RelayCommand(ImportHandler);
@@ -139,6 +150,17 @@ namespace KeyAdmin.ViewModel
         #endregion
 
         #region event handlers
+
+        private void CopyPwToClipboardHandler(ListViewItem obj)
+        {
+            if (obj.Content is AccountItem item)
+            {
+                if (_passwordStore.TryGetValue(item.Guid, out string pw))
+                {
+                    Clipboard.SetText(pw.Decrypt(null));
+                }
+            }
+        }
 
         private void CryptoImportHandler(bool isSystem = true)
         {
@@ -282,6 +304,10 @@ namespace KeyAdmin.ViewModel
             addDialog.ShowDialog();
             if (addDialog.DialogResult == true)
             {
+                AccountItem item = dataContext.AccountData[0];
+                AccountPropertiesItem pwProperty = item.Properties.FirstOrDefault(x => _pwAlias.Contains(x.Identifier));
+                _passwordStore.Add(item.Guid, pwProperty.Value.Encrypt(null));
+                pwProperty.Value = _pwPlaceholder;
                 AccountItems.Add(dataContext.AccountData[0]);
                 _accountItemsOriginal.Add(dataContext.AccountData[0]);
                 OnPropertyChanged("AccountItems");
@@ -389,6 +415,10 @@ namespace KeyAdmin.ViewModel
             if (addDialog.DialogResult == true)
             {
                 AccountItems.Remove(obj.Content as AccountItem);
+                AccountItem accItem = dataContext.AccountData[0];
+                AccountPropertiesItem pwProperty = accItem.Properties.FirstOrDefault(x => _pwAlias.Contains(x.Identifier));
+                _passwordStore.Add(accItem.Guid, pwProperty.Value.Encrypt(null));
+                pwProperty.Value = _pwPlaceholder;
                 AccountItems.Add(dataContext.AccountData[0]);
                 _accountItemsOriginal.Remove(_accountItemsOriginal.First(x => x.Guid == item.Guid));
                 _accountItemsOriginal.Add(dataContext.AccountData[0]);
@@ -430,16 +460,26 @@ namespace KeyAdmin.ViewModel
 
         private void DecryptItems()
         {
+            _passwordStore.Clear();
             foreach (AccountItem item in _accountItems)
             {
                 var itemId = item.Identifier.Decrypt(null);
                 item.Identifier = itemId ?? item.Identifier;
                 foreach (AccountPropertiesItem propertie in item.Properties)
                 {
-                    var value = propertie.Value.Decrypt(null);
-                    propertie.Value = value ?? propertie.Value;
                     var id = propertie.Identifier.Decrypt(null);
                     propertie.Identifier = id ?? propertie.Identifier;
+                    string cleanedId = propertie.Identifier.Trim().ToLower();
+                    if (_pwAlias.Contains(cleanedId))
+                    {
+                        propertie.Value = _pwPlaceholder;
+                        _passwordStore.Add(item.Guid, propertie.Value);
+                    }
+                    else
+                    {
+                        var value = propertie.Value.Decrypt(null);
+                        propertie.Value = value ?? propertie.Value;
+                    }
                 }
             }
         }
